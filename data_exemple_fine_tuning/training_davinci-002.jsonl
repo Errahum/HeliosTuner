@@ -1,0 +1,10 @@
+{"prompt": "Calculate the area of a circle given its radius.", "completion": "def circle_area(radius):\n return math.pi * radius**2\n"}
+{"prompt": "Find the volume of a sphere given its radius.", "completion": "def sphere_volume(radius):\n return (4/3) * math.pi * radius**3\n"}
+{"prompt": "Calculate the hypotenuse of a right triangle given the lengths of the other two sides.", "completion": "def hypotenuse(a, b):\n return math.sqrt(a**2 + b**2)\n"}
+{"prompt": "Find the roots of a quadratic equation ax^2 + bx + c = 0.", "completion": "def quadratic_roots(a, b, c):\n d = b**2 - 4*a*c\n root1 = (-b + math.sqrt(d)) / (2*a)\n root2 = (-b - math.sqrt(d)) / (2*a)\n return root1, root2\n"}
+{"prompt": "Calculate the factorial of a number.", "completion": "def factorial(n):\n if n == 0:\n return 1\n return n * factorial(n-1)\n"}
+{"prompt": "Find the nth Fibonacci number.", "completion": "def fibonacci(n):\n if n <= 0:\n return 0\n elif n == 1:\n return 1\n else:\n return fibonacci(n-1) + fibonacci(n-2)\n"}
+{"prompt": "Calculate the square root of a number.", "completion": "def sqrt(num):\n return math.sqrt(num)\n"}
+{"prompt": "Calculate the area of a triangle given its base and height.", "completion": "def triangle_area(base, height):\n return 0.5 * base * height\n"}
+{"prompt": "Calculate the volume of a cone given its radius and height.", "completion": "def cone_volume(radius, height):\n return (1/3) * math.pi * radius**2 * height\n"}
+{"prompt": "Find the prime factors of a number.", "completion": "def prime_factors(n):\n factors = []\n divisor = 2\n while divisor <= n:\n if n % divisor == 0:\n factors.append(divisor)\n n = n // divisor\n else:\n divisor += 1\n return factors\n"}

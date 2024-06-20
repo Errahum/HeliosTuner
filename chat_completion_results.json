@@ -1,0 +1,98 @@
+[
+    {
+        "user_message": "Find the roots of a quadratic equation ax^2 + bx + c = 0.",
+        "model": "ft:gpt-3.5-turbo-0125:personal:math-prog-testing:9QcXctvz",
+        "max_tokens": 200,
+        "temperature": 0.7,
+        "stop": null,
+        "response": "The roots of a quadratic equation ax^2 + bx + c = 0 can be found using the quadratic formula:\n\nx = (-b ± √(b^2 - 4ac)) / 2a\n\nwhere a, b, and c are the coefficients of the quadratic equation. The values of x obtained from this formula are the roots of the quadratic equation."
+    },
+    {
+        "user_message": "Find the roots of a quadratic equation ax^2 + bx + c = 0.",
+        "model": "ft:gpt-3.5-turbo-0125:personal:math-prog-testing:9QcXctvz",
+        "max_tokens": 200,
+        "temperature": 0.7,
+        "stop": null,
+        "response": "The roots of a quadratic equation ax^2 + bx + c = 0 can be found using the quadratic formula:\n\nx = (-b ± √(b^2 - 4ac)) / 2a\n\nwhere a, b, and c are the coefficients of the quadratic equation. The values of x obtained from this formula are the roots of the quadratic equation."
+    },
+    {
+        "user_message": "Find the roots of a quadratic equation ax^2 + bx + c = 0.",
+        "model": "ft:gpt-3.5-turbo-0125:personal:math-prog-testing:9QcXctvz",
+        "max_tokens": 200,
+        "temperature": 0.7,
+        "stop": null,
+        "response": "The roots of a quadratic equation ax^2 + bx + c = 0 can be found using the quadratic formula:\n\nx = (-b ± √(b^2 - 4ac)) / 2a\n\nwhere a, b, and c are the coefficients of the quadratic equation. The expression inside the square root, b^2 - 4ac, is called the discriminant. Depending on the value of the discriminant, the roots of the quadratic equation can be classified as follows:\n\n1. If the discriminant is positive (b^2 - 4ac > 0), then the equation has two distinct real roots.\n2. If the discriminant is zero (b^2 - 4ac = 0), then the equation has one real root (a repeated root).\n3. If the discriminant is negative (b^2 - 4ac < 0), then the equation has two complex roots.\n\nBy plugging the values of a, b"
+    },
+    {
+        "user_message": "Find the roots of a quadratic equation ax^2 + bx + c = 0.",
+        "model": "ft:gpt-3.5-turbo-0125:personal:math-prog-testing:9QcXctvz",
+        "max_tokens": 200,
+        "temperature": 0.7,
+        "stop": null,
+        "response": "The roots of a quadratic equation ax^2 + bx + c = 0 can be found using the quadratic formula:\n\nx = (-b ± √(b^2 - 4ac)) / 2a\n\nwhere a, b, and c are the coefficients of the quadratic equation. The expression inside the square root, b^2 - 4ac, is called the discriminant.\n\n1. If the discriminant (b^2 - 4ac) is greater than zero, the equation has two distinct real roots.\n2. If the discriminant is equal to zero, the equation has one real root that is repeated.\n3. If the discriminant is less than zero, the equation has two complex roots.\n\nBy plugging in the values of a, b, and c into the quadratic formula, one can calculate the roots of the quadratic equation."
+    },
+    {
+        "user_message": "Find the roots of a quadratic equation ax^2 + bx + c = 0.",
+        "model": "ft:gpt-3.5-turbo-0125:personal::9QEhlDOP",
+        "max_tokens": 200,
+        "temperature": 0.7,
+        "stop": null,
+        "response": "def quadratic_roots(a, b, c):\n d = b**2 - 4*a*c\n root1 = (-b + math.sqrt(d)) / (2*a)\n root2 = (-b - math.sqrt(d)) / (2*a)\n return root1, root2\n"
+    },
+    {
+        "user_message": "Find the roots of a quadratic equation ax^2 + bx + c = 0.",
+        "model": "ft:gpt-3.5-turbo-0125:personal:math-prog-testing:9QcXctvz",
+        "max_tokens": 200,
+        "temperature": 0.7,
+        "stop": null,
+        "response": "The roots of a quadratic equation ax^2 + bx + c = 0 can be found using the quadratic formula:\n\nx = (-b ± √(b^2 - 4ac)) / 2a\n\nwhere a, b, and c are the coefficients of the quadratic equation. The expression inside the square root, b^2 - 4ac, is called the discriminant.\n\nBased on the discriminant, the roots of the quadratic equation can be classified as follows: \n\n1. If the discriminant is greater than zero (b^2 - 4ac > 0), the equation has two distinct real roots.\n2. If the discriminant is equal to zero (b^2 - 4ac = 0), the equation has one real root that is repeated.\n3. If the discriminant is less than zero (b^2 - 4ac < 0), the equation has two complex roots.\n\nBy plugging in the values of a,"
+    },
+    {
+        "user_message": "Find the roots of a quadratic equation ax^2 + bx + c = 0.",
+        "model": "ft:gpt-3.5-turbo-0125:personal::9QEhlDOP",
+        "max_tokens": 200,
+        "temperature": 0.7,
+        "stop": null,
+        "response": "def quadratic_roots(a, b, c):\n d = b**2 - 4*a*c\n root1 = (-b + math.sqrt(d)) / (2*a)\n root2 = (-b - math.sqrt(d)) / (2*a)\n return root1, root2\n"
+    },
+    {
+        "user_message": "Find the roots of a quadratic equation ax^2 + bx + c = 0.",
+        "model": "ft:gpt-3.5-turbo-0125:personal::9QEhlDOP",
+        "max_tokens": 200,
+        "temperature": 0.7,
+        "stop": null,
+        "response": "def quadratic_roots(a, b, c):\n d = b**2 - 4*a*c\n root1 = (-b + math.sqrt(d)) / (2*a)\n root2 = (-b - math.sqrt(d)) / (2*a)\n return root1, root2\n"
+    },
+    {
+        "user_message": "Find the roots of a quadratic equation ax^2 + bx + c = 0.",
+        "model": "ft:gpt-3.5-turbo-0125:personal::9QEhlDOP",
+        "max_tokens": 200,
+        "temperature": 0.7,
+        "stop": null,
+        "response": "def quadratic_roots(a, b, c):\n d = b**2 - 4*a*c\n root1 = (-b + math.sqrt(d)) / (2*a)\n root2 = (-b - math.sqrt(d)) / (2*a)\n return root1, root2\n"
+    },
+    {
+        "user_message": "Find the roots of a quadratic equation ax^2 + bx + c = 0.",
+        "model": "ft:gpt-3.5-turbo-0125:personal::9QEhlDOP",
+        "max_tokens": 200,
+        "temperature": 0.7,
+        "stop": null,
+        "response": "def quadratic_roots(a, b, c):\n d = b**2 - 4*a*c\n root1 = (-b + math.sqrt(d)) / (2*a)\n root2 = (-b - math.sqrt(d)) / (2*a)\n return root1, root2\n"
+    },
+    {
+        "user_message": "Find the roots of a quadratic equation ax^2 + bx + c = 0.",
+        "model": "ft:gpt-3.5-turbo-0125:personal:demo:9cKu6KxH",
+        "max_tokens": 200,
+        "temperature": 0.7,
+        "stop": null,
+        "response": "def quadratic_roots(a, b, c):\n d = b**2 - 4*a*c\n root1 = (-b + math.sqrt(d)) / (2*a)\n root2 = (-b - math.sqrt(d)) / (2*a)\n return root1, root2\n"
+    },
+    {
+        "user_message": "Find the roots of a quadratic equation ax^2 + bx + c = 0.",
+        "model": "ft:gpt-3.5-turbo-0125:personal:demo:9cKu6KxH",
+        "max_tokens": 200,
+        "temperature": 0.7,
+        "stop": null,
+        "response": "def quadratic_roots(a, b, c):\n d = b**2 - 4*a*c\n root1 = (-b + math.sqrt(d)) / (2*a)\n root2 = (-b - math.sqrt(d)) / (2*a)\n return root1, root2\n"
+    }
+]

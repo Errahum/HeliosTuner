@@ -17,7 +17,7 @@ class OpenAIInterface(tk.Frame):
         self.default_max_tokens = 200
         self.default_temperature = 0.7
         self.default_windows = 5
-        self.default_message = "Envois seulement la fonction concerné corrigé et économise les tokens."
+        self.default_message = "Find the roots of a quadratic equation ax^2 + bx + c = 0."
 
         # Initialiser le handle de ChatCompletion
         self.config = config  # Vous pouvez configurer ce dictionnaire selon vos besoins

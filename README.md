@@ -23,7 +23,7 @@ This project guides you through the necessary steps to fine-tune a GPT model usi
 
 Before starting, make sure you have:
 
-- An OpenAI account with access to the GPT-3 API
+- An OpenAI account
 - Python 3.6 or higher
 - pip installed
 
@@ -36,15 +36,6 @@ git clone https://github.com/your-username/your-project.git
 cd your-project
 pip install -r requirements.txt
 ```
-## Usage
-
-1. Prepare your dataset for fine-tuning in JSONL format.
-2. Run the fine-tuning script:
-
-```bash
-python fine_tuning.py --data training_data.jsonl --model model_name
-```
-3. Check the results and adjust the parameters if necessary.
 
 ## Resources
 

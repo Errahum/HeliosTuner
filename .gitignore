@@ -167,3 +167,4 @@ job_id.txt
 latest_chat_completion.txt
 .idea
 __pycache__
+job_ids.txt

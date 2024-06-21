@@ -18,6 +18,7 @@ This project is designed to demonstrate how to fine-tune a model using the OpenA
 ## Introduction
 
 This project guides you through the necessary steps to fine-tune a GPT model using the OpenAI API. Fine-tuning allows improving the model's performance on specific tasks by using additional training data.
+Compared with openai, you can use the history of a conversation and keep it. What's more, you can have an ongoing conversation.
 
 ## Prerequisites
 

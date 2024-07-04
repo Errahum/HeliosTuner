@@ -1,7 +1,7 @@
 # Fine-Tuning Project with OpenAI
 
 Discover HeliosTuner, a open-source tool designed to simplify the fine-tuning process for OpenAI models. With HeliosTuner, you can effortlessly fine-tune language models like gpt-3.5-turbo.
-This project is designed to demonstrate how to fine-tune a model using the OpenAI API. Fine-tuning is a crucial step to adapt a pre-trained model to specific tasks using a custom dataset.
+Fine-tuning is a crucial step to adapt a pre-trained model to specific tasks using a custom dataset.
 
 ## Table of Contents
 

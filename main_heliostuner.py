@@ -6,7 +6,7 @@
 from src import Config, OpenAIInterfaceFT
 
 
-def main():
+def main_heliostuner():
     config = Config()
 
     app = OpenAIInterfaceFT(config)
@@ -14,4 +14,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main_heliostuner()

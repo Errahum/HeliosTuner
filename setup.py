@@ -23,7 +23,7 @@ setup(
     python_requires='>=3.6',
     entry_points={
         'console_scripts': [
-            'heliostuner=main:main',  # Assurez-vous que la fonction principale de main.py est appelée 'main'
+            'heliostuner=main_heliostuner:main_heliostuner',  # Assurez-vous que la fonction principale de main.py est appelée 'main'
         ],
     },
     include_package_data=True,  # Pour inclure des fichiers supplémentaires comme des fichiers de données

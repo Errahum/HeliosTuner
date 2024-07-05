@@ -5,7 +5,7 @@ setup(
     version='1.0.0',
     author='sahurows',
     description='A project for fine-tuning OpenAI models using HeliosTuner.',
-    long_description=open('README.md').read(),  # Assurez-vous d'avoir un fichier README.md
+    long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     url='https://github.com/Sahurows/HeliosTuner-OpenAI-fine-tuning',
     packages=find_packages(),
@@ -23,9 +23,9 @@ setup(
     python_requires='>=3.6',
     entry_points={
         'console_scripts': [
-            'heliostuner=main_heliostuner:main_heliostuner',  # Assurez-vous que la fonction principale de main.py est appelée 'main'
+            'heliostuner=main_heliostuner:main_heliostuner',
         ],
     },
-    include_package_data=True,  # Pour inclure des fichiers supplémentaires comme des fichiers de données
+    include_package_data=True,
     license='MIT',
 )

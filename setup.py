@@ -3,11 +3,11 @@ from setuptools import setup, find_packages
 setup(
     name='HeliosTuner',
     version='1.0.0',
-    author='sahurows',
+    author='sariteos',
     description='A project for fine-tuning OpenAI models using HeliosTuner.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
-    url='https://github.com/Sahurows/HeliosTuner-OpenAI-fine-tuning',
+    url='https://github.com/sariteos/HeliosTuner-OpenAI-fine-tuning',
     packages=find_packages(),
     install_requires=[
         'openai',

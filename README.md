@@ -27,15 +27,15 @@ Before starting, make sure you have:
 Clone the GitHub repository and install the required dependencies:
 
 ```bash
-git clone https://github.com/Sariteos/HeliosTuner-OpenAI-fine-tuning.git
+git clone https://github.com/Errahum/HeliosTuner-OpenAI-fine-tuning.git
 cd your-project
 pip install -r requirements.txt
 ```
 
 ## Resources
 
-- [French Tutorial](https://github.com/Sariteos/HeliosTuner-OpenAI-fine-tuning/blob/main/tutorial_fine_tuning_fr.md)
-- [English Tutorial](https://github.com/Sariteos/HeliosTuner-OpenAI-fine-tuning/blob/main/tutorial_fine_tuning_en.md)
+- [French Tutorial](https://github.com/Errahum/HeliosTuner-OpenAI-fine-tuning/blob/main/tutorial_fine_tuning_fr.md)
+- [English Tutorial](https://github.com/Errahum/HeliosTuner-OpenAI-fine-tuning/blob/main/tutorial_fine_tuning_en.md)
 
 ## Demo Video
 
@@ -53,4 +53,4 @@ This project is licensed under the MIT License. See the LICENSE file for more de
 
 ## Donate
 
-[![learning_application](https://i.imgur.com/abEFO5o.png)](https://buymeacoffee.com/Sariteos)
+[![learning_application](https://i.imgur.com/abEFO5o.png)](https://buymeacoffee.com/Errahum)

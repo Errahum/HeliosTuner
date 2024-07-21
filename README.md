@@ -46,6 +46,7 @@ For a visual demonstration of the fine-tuning process, watch the video below:
 ## Contribute
 
 Contributions are welcome! Please submit an issue or a pull request via GitHub.
+Please contact me before contributing.
 
 ## License
 

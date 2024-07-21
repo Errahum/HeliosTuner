@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import font, ttk
 from .fine_tuning_gui_util import OpenAiInterfaceUtils
+from ..jsonl_creator.thinker.jsonl_tk_gui import JsonlCreatorApp
 from ... import OpenAIInterface
 from ...services.fine_tuning.fine_tuning_handle import FineTuningHandle
 
@@ -78,6 +79,9 @@ class OpenAIInterfaceFT(tk.Tk):
 
         self.browse_button = tk.Button(self.params_frame, text="Browse", command=self.util_interface.browse_training_data, font=self.custom_font)
         self.browse_button.grid(row=0, column=2, padx=5, pady=5)
+        self.create_json_button = tk.Button(self.params_frame, text="create_jsonl", command=JsonlCreatorApp, font=self.custom_font)
+        self.create_json_button.grid(row=0, column=3, padx=5, pady=5)
+
 
         tk.Label(self.params_frame, text="Model:", font=self.custom_font).grid(row=1, column=0, sticky=tk.W)
         tk.Entry(self.params_frame, textvariable=self.model_entry, font=self.custom_font).grid(row=1, column=1, padx=5, pady=5)

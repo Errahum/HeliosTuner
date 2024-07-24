@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='HeliosTuner',
-    version='1.0.2',
+    version='1.0.3',
     author='Errahum',
     description='A project for fine-tuning OpenAI models using HeliosTuner.',
     long_description=open('README.md').read(),

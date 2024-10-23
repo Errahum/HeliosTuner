@@ -1,0 +1,144 @@
+/* Importer la police */
+@import url('https://fonts.googleapis.com/css2?family=Proza+Libre:wght@400;700&display=swap');
+
+/* Appliquer la police aux titres et descriptions des cartes */
+.payment-page{
+    font-family: 'Proza Libre', sans-serif;
+}
+
+/* PaymentPage.css */
+.payment-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #ffffff;
+  }
+  
+  .plan-buttons {
+    margin-bottom: 20px;
+  }
+  
+  .plan-buttons button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: auto;
+    font-size: 20px;
+  }
+  
+  .plan-buttons button.active {
+    background-color: #01438a;
+  }
+  
+  .plan-buttons button:hover {
+    background-color: #01438a;
+  }
+  
+  .offers-list {
+    list-style-type: none;
+    padding: 0;
+    height: 100vh; /* Assurez-vous que le conteneur parent prend toute la hauteur de la fenêtre */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Pour espacer les éléments si nécessaire */
+    
+  }
+  
+  .offer-item {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px;
+    width: 300px;
+    text-align: center;
+    flex-grow: 1; /* Permet à l'élément de prendre toute la hauteur disponible */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Aligner les éléments en haut */
+    background-color: #01438a;
+    color: white;
+  }
+  
+  .offer-item h2 {
+    margin: 0 0 10px 0;
+  }
+  
+  .offer-item p {
+    margin: 20px 0;
+  }
+  
+  .offer-item button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #FFA500;
+    color: black;
+    border: none;
+    font-size: 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    align-self: center; /* Centrer le bouton horizontalement */
+    width: 100%; /* Rendre le bouton plus large */
+  }
+  
+  .offer-item button:hover {
+    background-color: #ffbc3f;
+  }
+
+  .plan-buttons {
+    margin-bottom: 20px;
+  }
+  
+  .plan-buttons button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    background-color: #5a5a5a;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .plan-buttons button.active {
+    background-color: #FFA500;
+    size: 20px;
+    color: black;
+  }
+  
+  .plan-buttons button:hover {
+    background-color: #ffbc3f;
+  }
+
+  .offer-details {
+    font-size: 20px;
+    text-align: left;
+    color: #ffffff;
+  }
+  .price-type {
+    display: flex;
+    width: 100%;
+    margin: 10px 0;
+
+  }
+  .price-type .price {
+    font-size: 2.5em; /* Ajustez cette valeur selon vos besoins */
+    font-weight: bold;
+    text-align: left;
+  }
+  .price-type .type {
+    margin-left: -85px;
+    color: #a3a3a3;
+    margin-top: -12px;
+    font-size: 13px;
+    text-align: left;
+  }
+
+  .price-type .comment{
+    margin-top: 20px;
+    margin-left: 10px;
+    font-weight: bold;
+  }

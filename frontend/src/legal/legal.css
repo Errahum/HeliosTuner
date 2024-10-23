@@ -1,0 +1,16 @@
+.markdown-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #222222;
+  }
+  
+  .markdown-body {
+    max-width: 800px;
+    width: 100%;
+    padding: 20px;
+    background-color: #222222;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }

@@ -1,0 +1,239 @@
+/* header_dashboard.css */
+@import url('https://fonts.googleapis.com/css2?family=Proza+Libre:wght@400;700&display=swap');
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Proza Libre', sans-serif;
+
+}
+
+.utils {
+    text-decoration: none;
+
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #636363;
+    color: white;
+    font-family: 'Proza Libre', sans-serif;
+    font-size: 16px;
+}
+.tools {
+    text-decoration: none;
+
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #e9b47700;
+    color: white;
+    font-family: 'Proza Libre', sans-serif;
+    font-size: 16px;
+}
+.utils:hover {
+    background-color: #8a8a8a;
+    color: black;
+    font-family: 'Proza Libre', sans-serif;
+    font-size: 16px;
+}
+
+.tools:hover {
+    background-color: #FFA500;
+    color: black;
+    font-family: 'Proza Libre', sans-serif;
+    font-size: 16px;
+}
+
+.dashboard .left {
+    display: flex;
+    align-items: center; /* Ensure image and text are vertically aligned */
+    flex: 1 1 100%; /* Allow to grow and shrink, full width on small screens */
+    font-family: 'Proza Libre', sans-serif;
+    font-size: 20px;
+}
+
+.dashboard .left img {
+    width: 150px; /* Increase width */
+    height: 150px; /* Increase height */
+    margin-right: 20px; /* Add spacing between image and text/buttons */
+    margin-left: 20px;
+
+}
+
+.dashboard .left h1 {
+    margin-bottom: 10px;
+    font-family: 'Proza Libre', sans-serif;
+}
+
+.dashboard .left .buttons {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+    
+    
+}
+
+.dashboard-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align text/buttons to the left */
+    flex: 1 1 100%; /* Allow to grow and shrink, full width on small screens */
+    margin-right: 20px;
+    
+}
+
+
+
+
+.dashboard-header .menu button:hover {
+    background-color: #6c757d;
+}
+
+
+.dashboard .left .buttons .disabled {
+    background-color: #474747;
+    color: white;
+    cursor: not-allowed;
+    font-family: 'Proza Libre', sans-serif;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 17px;
+}
+
+.dashboard .left .buttons .enabled {
+    background-color: #FFA500;
+    color: black;
+    font-family: 'Proza Libre', sans-serif;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 17px;
+}
+
+.dashboard .left .buttons .enabled:hover {
+    background-color: #ffb732;
+}
+
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 20px;
+    background-color: #003366;
+    color: white;
+    /* border-bottom: 1px solid #dee2e6; */
+}
+
+.dashboard-header .logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.dashboard-header .menu {
+    margin-left: auto; /* Ensure the menu is pushed to the right */
+    display: flex;
+    gap: 10px;
+    
+}
+
+
+
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items vertically */
+    padding: 50px;
+    background-color: #003366;
+    color: white;
+}
+
+.dashboard-info {
+    display: flex;
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+    width: 100%; /* Ensure it takes full width */
+}
+
+.dashboard .left .buttons .enabled {
+    background-color: #FFA500;
+    color: black;
+    
+    
+}
+
+.dashboard .left .buttons .enabled:hover {
+    background-color: #ffb732;
+}
+
+.dashboard .right {
+    flex: 1 1 100%; /* Allow to grow and shrink, full width on small screens */
+    padding: 20px;
+    /* border-left: 1px solid #dee2e6; */
+    max-width: 600px; /* Optionnel: Limite maximale de la largeur */
+    max-height: 400px; /* Optionnel: Limite maximale de la hauteur */
+}
+
+.dashboard .right .chart {
+    width: 100%;
+    height: 100%;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Media Queries for Responsive Design */
+@media (min-width: 768px) {
+    .dashboard {
+        flex-direction: row; /* Change to row on medium and larger screens */
+    }
+    .dashboard .left, .dashboard-info, .dashboard .right {
+        flex: 1; /* Equal width for all items on medium and larger screens */
+    }
+}
+
+@media (min-width: 1024px) {
+    .dashboard .left, .dashboard-info, .dashboard .right {
+        flex: 1; /* Equal width for all items on large screens */
+    }
+}
+.dashboard-header .hamburger {
+    display: none; /* Hidden by default */
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+@media (max-width: 1124px) {
+    .dashboard-header .menu {
+        display: none; /* Hide menu by default on small screens */
+        flex-direction: column;
+        position: absolute;
+        top: 70px; /* Below header */
+        right: 20px;
+        background-color: #003366;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .dashboard-header .menu.open {
+        display: flex; /* Show menu when open */
+    }
+
+    .dashboard-header .hamburger {
+        display: block; /* Show hamburger on small screens */
+        position: absolute;
+        right: 20px;
+        top: 20px;
+    }
+}

@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Proza+Libre:wght@400;700&display=swap');
+
+
+.account-container {
+    font-size: 18px;
+    font-family: 'Proza Libre', sans-serif;
+    display: flex;
+    flex-direction: column; /* Arrange items in a column */
+    padding: 20px;
+
+    align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+    background-color: #252525;
+    color: rgb(212, 212, 212);
+}
+
+.account-side-by-side-container {
+    display: flex;
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+    width: 100%;
+}
+
+.account-left-side, .account-right-side {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+}
+
+.account-left-side h1, .account-right-side h1 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    text-align: center; /* Center text */
+}
+
+.account-left-side p, .account-right-side p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    text-align: center; /* Center text */
+}
+
+
+
+.cancel-button-container {
+    display: flex;
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+}
+.spacer_account {
+    height: 58px;
+    background-color: #252525;
+
+}
+
+.account-button-orange {
+    /* position: fixed; */
+    /* display: none; */
+    bottom: 0;
+    width: 55%;
+
+    background-color: #ff9900;
+    color: black;
+    font-size: 18px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.account-button-orange:hover {
+    background-color: #faaa33;
+}
+
+/* Cancel */
+.cancel-button-info {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center; /* Center text */
+    color: #ff0000;
+}
+
+.account-button-grey{
+    margin-top: 20px;
+    padding: 5px 20px;
+    background-color: #474747;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.account-button-grey:hover {
+    background-color: #b10101;
+    color: #ffffff;
+  }

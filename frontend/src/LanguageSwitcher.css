@@ -1,0 +1,20 @@
+.languageswitch_cont{
+    display: flex;
+    justify-content: Right;
+    background-color: #003366;
+}
+
+.languageswitch_cont button {
+    background-color: #FFA500;
+    border: none;
+
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    font-family: 'Proza Libre', sans-serif;
+  }

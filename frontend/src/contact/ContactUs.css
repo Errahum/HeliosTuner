@@ -1,0 +1,75 @@
+.contact-us-container_main{
+  background-color: #252525;
+  color: rgb(212, 212, 212);
+  font-family: 'Proza Libre', sans-serif;
+  font-size: 18px;
+}
+
+.contact-us-container {
+    max-width: 600px;
+    font-size: 18px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    
+  }
+  .contact-us-write{
+    background-color: #3a3a3a;
+    font-family: 'Proza Libre', sans-serif;
+    font-size: 18px;
+    color: rgb(212, 212, 212);
+  }
+  .contact-us-container h2 {
+    text-align: center;
+  }
+  
+  .contact-us-container form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .contact-us-container form div {
+    margin-bottom: 15px;
+  }
+  
+  .contact-us-container form label {
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .contact-us-container form input,
+  .contact-us-container form textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+  }
+  
+  .contact-us-container form button {
+    padding: 10px 15px;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    background-color: #FFA500;
+    color: blac;
+    cursor: pointer;
+    
+  }
+  
+  .contact-us-container form button:hover {
+    background-color: #ffb01e;
+  }
+  
+  .contact-us-container p {
+    text-align: center;
+    color: #9c9c9c;
+    font-weight: bold;
+  }
+  .spacer_contact {
+    height: 330px;
+}

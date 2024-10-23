@@ -1,0 +1,11 @@
+Lorsque vous effectuez des tests interactifs, utilisez un numéro de carte bancaire de type 4242 4242 4242 4242. Saisissez ce numéro de carte dans le Dashboard ou dans un formulaire de paiement.
+
+Utilisez une date d’expiration valide telle que 12/34.
+Utilisez n’importe quel code CVC à trois chiffres (quatre chiffres pour les cartes American Express).
+Utilisez la valeur de votre choix pour les autres champs du formulaire.
+
+4242 4242 4242 4242
+12/34
+123
+
+stripe listen --forward-to localhost:5000/api/webhook

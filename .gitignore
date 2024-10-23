@@ -1,0 +1,7 @@
+latest_chat_completion.txt
+chat_completion_results.json
+backend.logs
+logs/
+job_ids.txt
+temp_training_gpt.jsonl
+*.jsonl

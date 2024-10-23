@@ -1,0 +1,91 @@
+/* Importer la police */
+@import url('https://fonts.googleapis.com/css2?family=Proza+Libre:wght@400;700&display=swap');
+
+/* Appliquer la police aux titres et descriptions des cartes */
+.card-title, .card-description {
+    font-family: 'Proza Libre', sans-serif;
+    
+}
+
+.block-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+@keyframes moveUp {
+  0%, 100% {
+    transform: translateY(10px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes moveDown {
+  0%, 100% {
+    transform: translateY(-10px);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+}
+
+.card {
+    width: 330px; /* Ajuster la taille des blocs pour qu'ils soient plus gros */
+    margin: 10px;
+    border-radius: 5px;
+    background-color: #333333 !important; /* À utiliser avec précaution */
+    padding: 20px;
+    animation-duration: 7s; /* Augmenter la durée de l'animation pour la rendre plus lente */
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
+
+.card:nth-child(odd) {
+    animation-name: moveUp;
+}
+
+.card:nth-child(even) {
+    animation-name: moveDown;
+}
+
+.card-content {
+    text-align: left; /* Conservez le texte à gauche */
+    color: #282c34; /* Vous pouvez personnaliser cette couleur si nécessaire */
+}
+
+.card-title {
+    color: #FFA500;
+    font-weight: bold;
+}
+
+.card-description {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+    font-size: 20px !important; /* Modifier la taille de la police */
+    line-height: 1.5 !important; /* Modifier la hauteur de ligne */
+    color: rgb(216, 216, 216);
+}
+
+.spacer {
+    width: 100%;
+    height: 10px; /* Taille de l'espacement entre les groupes de 4 blocs */
+}
+
+.special-card-2 {
+    background-color: #707070 !important; /* Couleur de fond différente pour le 2ème bloc */
+    color: #FFFFFF!important; /* Couleur de texte différente pour le 2ème bloc */
+}
+
+.special-card-7 {
+    background-color: #707070 !important; /* Couleur de fond différente pour le 7ème bloc */
+    color: #FFFFFF !important; /* Couleur de texte différente pour le 7ème bloc */
+}
+
+/* Vous pouvez également avoir besoin d'ajouter des styles pour les contenus des cartes */
+.special-card-2 .card-content,
+.special-card-7 .card-content {
+    color: inherit; /* Assurez-vous que le texte hérite de la couleur définie */
+}

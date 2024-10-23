@@ -1,0 +1,233 @@
+@import url('https://fonts.googleapis.com/css2?family=Proza+Libre:wght@400;700&display=swap');
+.App {
+  text-align: center;
+  background-color: #252525;
+  color: rgb(212, 212, 212);
+  font-family: 'Proza Libre', sans-serif;
+  font-size: 18px;
+}
+
+
+.logo {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  height: 60px;
+}
+
+.App-header {
+  background-color: #003366;
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: left;
+}
+
+
+.main-description {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 50px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.content-left {
+  width: 50%;
+}
+
+.content-left h2 {
+  font-size: 2.2em;
+  margin-bottom: 10px;
+
+}
+
+.content-left p {
+  font-size: 1.2em;
+  line-height: 1.6;
+
+}
+
+
+
+.email-input {
+  padding: 10px;
+  font-size: 16px;
+  margin-right: 10px;
+  border-radius: 5px;
+
+}
+
+.email-signup {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  margin-top: 20px;
+}
+
+.email-signup p{
+
+  font-size: 0.8em;
+
+  margin-top: 0px;
+  font-family: 'Proza Libre', sans-serif;
+}
+
+.no-blue-link {
+  color: inherit; /* Utilise la couleur du texte parent */
+  text-decoration: none; /* Supprime le soulignement */
+  color: #FFA500;
+}
+
+.email-signup input[type="email"] {
+  padding: 10px;
+  margin-bottom: 10px;
+
+  border-radius: 4px;
+  font-size: 16px;
+  font-family: 'Proza Libre', sans-serif;
+}
+
+.email-signup button {
+  background-color: #FFA500;
+  border: none;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  font-family: 'Proza Libre', sans-serif;
+}
+
+.email-signup button:hover {
+  background-color: #8b5b00;
+  font-family: 'Proza Libre', sans-serif;
+}
+
+
+
+.block-section {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin: 40px auto;
+  max-width: 1200px;
+  padding: 20px;
+}
+
+.block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.block-content {
+  width: 45%;
+  text-align: left;
+}
+
+.block-content h3 {
+  font-size: 1.8em;
+  color: rgb(212, 212, 212);
+}
+
+.block-content p {
+  font-size: 1.2em;
+  color: rgb(156, 156, 156);
+}
+
+.block-image {
+  width: 30%;
+  height: auto;
+  border-radius: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+@media (max-width: 768px) {
+  .block-image {
+    display: none; /* Désactive l'image sur les appareils mobiles */
+  }
+}
+.animate-right {
+  transform: translateX(-20px);
+}
+
+.animate-left {
+  transform: translateX(20px);
+}
+
+
+.block-image:hover {
+  transform: translateX(0);
+}
+
+.faq-section {
+  background-color: #3a3a3a;
+  padding: 50px;
+  text-align: left;
+  max-width: 700px;
+  margin: 0 auto;
+  border-radius: 3px;
+}
+
+.faq-section h2 {
+  color: rgb(226, 226, 226);
+  font-size: 2.2em;
+  margin-bottom: 20px;
+}
+
+.faq-item {
+  margin-bottom: 20px;
+}
+
+.faq-item h4 {
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.faq-item h4:hover {
+  color: #FFA500; /* Change color on hover */
+}
+
+.faq-item p {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease, opacity 0.5s ease;
+  opacity: 0;
+}
+
+.faq-item p.show {
+  max-height: 200px; /* Adjust based on content */
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .main-description {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .content-left {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+
+
+  .block {
+    flex-direction: column;
+  }
+
+  .block-image, .block-content {
+    width: 100%;
+  }
+
+
+}

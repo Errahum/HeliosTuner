@@ -18,6 +18,7 @@ import PolitiqueConfidentialite from './legal/politiqueConfidentialite';
 import './i18n'; // Importer la configuration i18n
 import LanguageSwitcher from './LanguageSwitcher'; // Importer le composant LanguageSwitcher
 import HelmetPageInfo from './pageInfo'; // Importer le composant PageInfo
+import HeaderDashboard2 from './openai_product/header_dashboard2';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -65,12 +66,12 @@ root.render(
           <Footer/>
           </>} />
         <Route path="/terms-of-service" element={<>
-          <HeaderDashboard />
+          <HeaderDashboard2 />
           <ConditionSercice/>
           <Footer/>
           </>} />
           <Route path="/privacy-policy" element={<>
-          <HeaderDashboard />
+          <HeaderDashboard2 />
           <PolitiqueConfidentialite/>
           <Footer/>
           </>} />

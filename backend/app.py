@@ -137,10 +137,12 @@ def contact_us():
 
     try:
         with smtplib.SMTP(smtp_host, smtp_port) as server:
+            server.starttls()  # Upgrade the connection to a secure encrypted SSL/TLS connection
             server.login(username, password)
             server.sendmail(username, to_email, msg.as_string())
         return jsonify({'message': 'Email sent successfully!'}), 200
     except Exception as e:
+        logging.error(f"Error sending email: {e}")
         return jsonify({'error': str(e)}), 500
     
 # ----------------------------------------------------------------

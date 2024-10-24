@@ -4,11 +4,11 @@ import axios from 'axios';
 const BackendStatusChecker = ({ children }) => {
   const [backendStatus, setBackendStatus] = useState(null);
   const url = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
-
+  // url+
   const checkBackendStatus = useCallback(async () => {
     try {
       console.log("Checking backend status..."); // Log avant la requête
-      const response = await axios.get('/api/check-backend-status');
+      const response = await axios.get(url+'/api/check-backend-status');
       console.log("Response received:", response); // Log de la réponse
 
       if (response.status === 200 || response.status === 304) {
@@ -32,7 +32,7 @@ const BackendStatusChecker = ({ children }) => {
         alert(`Error: ${error.message}`);
       }
     }
-  }, []);
+  }, [url]);
 
   useEffect(() => {
     checkBackendStatus();

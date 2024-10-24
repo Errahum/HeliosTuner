@@ -4,6 +4,8 @@ import img1 from '../images/design-image.svg';
 import logo from '../logo.svg';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+const url = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+// url+
 
 const HeaderDashboard = () => {
     const [tokens, setTokens] = useState(0);
@@ -15,7 +17,14 @@ const HeaderDashboard = () => {
     useEffect(() => {
         const fetchTokens = async () => {
             try {
-                const response = await fetch('/api/get-tokens');
+                const response = await fetch(url + '/api/get-tokens', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Exemple d'ajout de jeton JWT
+                    },
+                    credentials: 'include', // Inclure les cookies de session
+                });
                 const data = await response.json();
                 setTokens(data.tokens || 0);
             } catch (error) {
@@ -23,11 +32,20 @@ const HeaderDashboard = () => {
                 setTokens(0);
             }
         };
+    
         async function fetchSubscriptionInfo() {
-            const response = await fetch('/api/get-subscription-info');
+            const response = await fetch(url + '/api/get-subscription-info', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Exemple d'ajout de jeton JWT
+                },
+                credentials: 'include', // Inclure les cookies de session
+            });
             const data = await response.json();
             setSubscriptionPlan(data.subscriptionPlan);
         }
+    
         fetchSubscriptionInfo();
         fetchTokens();
         const interval = setInterval(fetchTokens, 60000);

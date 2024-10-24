@@ -21,63 +21,73 @@ import HelmetPageInfo from './pageInfo'; // Importer le composant PageInfo
 import HeaderDashboard2 from './openai_product/header_dashboard2';
 import BackendStatusChecker from './backend-check/BackendStatusChecker';
 
+const originalFetch = window.fetch;
+window.fetch = function (url, options = {}) {
+  options.headers = {
+    ...options.headers,
+  };
+  options.credentials = 'include'; // Inclure les credentials
+  return originalFetch(url, options);
+};
+
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Router>
       <BackendStatusChecker>
-      <LanguageSwitcher /> {/* Ajouter le composant LanguageSwitcher */}
-      <HelmetPageInfo />
-      <Routes>
-        <Route path="/" element={<>
-          <App />
-          <Footer/>
+        <LanguageSwitcher /> {/* Ajouter le composant LanguageSwitcher */}
+        <HelmetPageInfo />
+        <Routes>
+          <Route path="/" element={<>
+            <App />
+            <Footer />
           </>} />
-        <Route path="/payment" element={<>
-          <HeaderDashboard />
-          <PaymentPage />
-          <Footer/>
+          <Route path="/payment" element={<>
+            <HeaderDashboard />
+            <PaymentPage />
+            <Footer />
           </>} />
-        <Route path="/jsonl-creator" element={<>
-          <HeaderDashboard />
-          <JsonlCreatorApp />
-          <Footer/>
-        </>} />
-        <Route path="/chat-completion" element={<>
-          <HeaderDashboard />
-          <ChatCompletionApp />
-          <Footer/>
-        </>} />
-        <Route path="/fine-tuning" element={<>
-          <HeaderDashboard />
-          <FineTuningApp />
-          <Footer/>
-        </>} />
-        <Route path="/home" element={<>
-          <HeaderDashboard />
-          <Home />
-        </>} />
-        <Route path="/account" element={<>
-          <HeaderDashboard />
-          <Account />
-          <Footer/>
+          <Route path="/jsonl-creator" element={<>
+            <HeaderDashboard />
+            <JsonlCreatorApp />
+            <Footer />
           </>} />
-        <Route path="/contact-us" element={<>
-          <HeaderDashboard />
-          <ContactUs/>
-          <Footer/>
+          <Route path="/chat-completion" element={<>
+            <HeaderDashboard />
+            <ChatCompletionApp />
+            <Footer />
           </>} />
-        <Route path="/terms-of-service" element={<>
-          <HeaderDashboard2 />
-          <ConditionSercice/>
-          <Footer/>
+          <Route path="/fine-tuning" element={<>
+            <HeaderDashboard />
+            <FineTuningApp />
+            <Footer />
+          </>} />
+          <Route path="/home" element={<>
+            <HeaderDashboard />
+            <Home />
+          </>} />
+          <Route path="/account" element={<>
+            <HeaderDashboard />
+            <Account />
+            <Footer />
+          </>} />
+          <Route path="/contact-us" element={<>
+            <HeaderDashboard />
+            <ContactUs />
+            <Footer />
+          </>} />
+          <Route path="/terms-of-service" element={<>
+            <HeaderDashboard2 />
+            <ConditionSercice />
+            <Footer />
           </>} />
           <Route path="/privacy-policy" element={<>
-          <HeaderDashboard2 />
-          <PolitiqueConfidentialite/>
-          <Footer/>
+            <HeaderDashboard2 />
+            <PolitiqueConfidentialite />
+            <Footer />
           </>} />
-      </Routes>
+        </Routes>
       </BackendStatusChecker>
     </Router>
   </React.StrictMode>

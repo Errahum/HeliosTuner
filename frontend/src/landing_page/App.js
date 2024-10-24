@@ -6,14 +6,15 @@ import img1 from '../images/design-image.svg';
 import img2 from '../images/design-imag2.svg';
 import BlockCards from './BlockCards';
 import { useTranslation } from 'react-i18next';
-
+const url = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+// url+
 
 async function sendMagicLink(email) {
   try {
     console.log("Sending magic link to:", email); // Log email before sending request
     alert(`Sending magic link to: ${email}`); // Message box before sending request
 
-    const response = await fetch('/api/send-magic-link', {
+    const response = await fetch(url+'/api/send-magic-link', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

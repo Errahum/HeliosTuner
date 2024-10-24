@@ -1,7 +1,7 @@
 {
   "monthly": {
-    "price_1Q0nYyAeHcU4N7RPIkPVtN6k": {
-      "id": "price_1Q0nYyAeHcU4N7RPIkPVtN6k",
+    "price_1QBHWGAeHcU4N7RPYNfLDAnu": {
+      "id": "price_1QBHWGAeHcU4N7RPYNfLDAnu",
       "name": "Starter Plan",
       "type": "",
       "description": "",
@@ -13,8 +13,8 @@
     }
   },
   "yearly": {
-    "price_1Q0nZeAeHcU4N7RPnbobJk8s": {
-      "id": "price_1Q0nZeAeHcU4N7RPnbobJk8s",
+    "price_1QBHWGAeHcU4N7RPkto3e1Ia": {
+      "id": "price_1QBHWGAeHcU4N7RPkto3e1Ia",
       "name": "Starter Plan",
       "type": "6+ months free \\n billed yearly $98",
       "description": "",

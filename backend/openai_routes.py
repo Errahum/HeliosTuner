@@ -1,21 +1,19 @@
-import base64
 import json
 import logging
 import os
-import re
 import time
 import uuid 
 from flask import Blueprint, request, jsonify, session
-from openai import OpenAI
 import requests
 import supabase
+from datetime import datetime
+
 from supabase_client import get_supabase_client
 from src.services.fine_tuning.fine_tuning_handle import FineTuningHandle
 from src.services.chat_completion.chat_completion_handle import ChatCompletionHandle
 from src.utils.jsonl_creator.jsonl_creator import create_jsonl_entry, save_to_jsonl
 from src import Config
 from src.utils.custom_logging import logging_custom
-from datetime import datetime
 
 
 logging_custom()

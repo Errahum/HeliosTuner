@@ -1,7 +1,6 @@
 import logging
 import os
 import time
-from tkinter import messagebox
 
 import openai
 from openai import OpenAI
@@ -133,7 +132,6 @@ class FineTuningHandle:
                     logging.info("Invalid job ID format: {job_id}")
         except FineTuningRequestError as e:
             logging.error(f"Fine-tuning request error: {e.message}")
-            messagebox.showerror("Error", f"Fine-tuning request error: {e.message}")
         except InvalidFineTuningModelError as e:
             logging.error(f"Invalid fine-tuning model error: {str(e)}")
         except ServiceNotFoundError as e:

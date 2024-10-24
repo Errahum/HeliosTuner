@@ -11,6 +11,10 @@ from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 import traceback
 from datetime import datetime, timedelta
 import logging
+from flask_cors import CORS
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from flask_talisman import Talisman
 
 # Ajoutez le chemin du dossier backend au PYTHONPATH
 import sys
@@ -32,13 +36,69 @@ serializer = URLSafeTimedSerializer(os.getenv("SECRET_KEY"))
 
 supabase = get_supabase_client()
 
-stripe.api_key = os.getenv('stripe_key_test_backend')
 
-stripe.api_key = str(os.getenv("stripe_key_test_backend"))# Initialiser la gestion du chat
+
+stripe.api_key = str(os.getenv("stripe_key_backend"))
 
 
 PRODUCT_ID = (os.getenv("stripe_product_ID"))  # Remplacez par l'ID de votre produit
 
+# -------------------------Security--------------------------------
+
+# Configuration de la politique de sécurité du contenu (CSP)
+csp = {
+    'default-src': [
+        "'self'",
+        'https://apis.google.com',
+        'https://cdnjs.cloudflare.com',
+        'https://stackpath.bootstrapcdn.com',
+        'https://fonts.googleapis.com',
+        'https://fonts.gstatic.com',
+        'https://www.youtube.com',
+        'https://www.gstatic.com',
+        'https://www.google-analytics.com'
+    ],
+    'script-src': [
+        "'self'",
+        "'unsafe-inline'",
+        'https://apis.google.com',
+        'https://cdnjs.cloudflare.com',
+        'https://stackpath.bootstrapcdn.com',
+        'https://www.youtube.com',
+        'https://www.gstatic.com',
+        'https://www.google-analytics.com'
+    ],
+    'style-src': [
+        "'self'",
+        "'unsafe-inline'",
+        'https://fonts.googleapis.com',
+        'https://stackpath.bootstrapcdn.com'
+    ],
+    'img-src': [
+        "'self'",
+        'data:',
+        'https://www.google-analytics.com'
+    ],
+    'frame-src': [
+        "'self'",
+        'https://www.youtube.com'
+    ]
+}
+
+if os.getenv('FLASK_ENV') == 'production':
+    Talisman(app, content_security_policy=csp)
+
+
+# Initialize Limiter
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["200 per day", "50 per hour"]
+)
+
+# Configurer CORS pour n'autoriser que les origines de confiance
+origins = os.getenv("FRONTEND_URL", "http://localhost:3000")
+CORS(app, origins=origins)
 
 # -------------------------Product--------------------------------
 
@@ -57,6 +117,7 @@ except Exception as e:
 import json  # Assurez-vous que le module json est importé
 
 @app.route('/api/get-subscription-info', methods=['GET'])
+@limiter.limit("10 per minute")
 def get_subscription_info():
     email = session.get('email')
     if not email:
@@ -99,6 +160,7 @@ def get_subscription_info():
 
 
 @app.route('/api/cancel-subscription', methods=['POST'])
+@limiter.limit("1 per minute")
 def cancel_subscription():
     email = session.get('email')
     if not email:
@@ -122,6 +184,7 @@ password = os.getenv('SMTP_PASSWORD')
 to_email = os.getenv('SMTP_TO_EMAIL')
 
 @app.route('/api/contact-us', methods=['POST'])
+@limiter.limit("1 per minute")
 def contact_us():
     if 'email' not in session:
         return jsonify({'error': 'Unauthorized'}), 401
@@ -152,6 +215,7 @@ def contact_us():
 # ----------------------------------------------------------------
 
 @app.route('/api/user-info', methods=['GET'])
+@limiter.limit("10 per minute")
 def get_user_info():
     try:
         email = session.get('email')
@@ -168,6 +232,7 @@ def get_user_info():
 
 
 @app.route('/api/get-tokens', methods=['GET'])
+@limiter.limit("10 per minute")
 def get_tokens():
     email = session.get('email')
     if not email:
@@ -217,6 +282,7 @@ def is_valid_email(email):
     return re.match(r"[^@]+@[^@]+\.[^@]+", email)
 
 @app.route('/api/send-magic-link', methods=['POST'])
+@limiter.limit("1 per minute")
 def send_magic_link():
     data = request.json
     email = data.get('email')
@@ -272,6 +338,7 @@ def generate_jwt(email):
     return token
 
 @app.route('/api/check-session', methods=['GET'])
+@limiter.limit("10 per minute")
 def check_session():
     jwt_token = session.get('jwt_token')
 
@@ -288,6 +355,7 @@ def check_session():
 
 
 @app.route('/api/verify-magic-link', methods=['POST'])
+@limiter.limit("10 per minute")
 def verify_magic_link():
     data = request.json
     email = data.get('email')
@@ -352,6 +420,7 @@ def verify_magic_link():
 
 
 @app.route('/api/get-offers', methods=['GET'])
+@limiter.limit("10 per minute")
 def get_offers():
     try:
         # Récupérer le produit spécifique
@@ -382,10 +451,12 @@ with open('payment_links.json') as f:
     payment_links = json.load(f)
 
 @app.route('/api/payment-links', methods=['GET'])
+@limiter.limit("10 per minute")
 def get_payment_links():
     return jsonify(payment_links)
 
 @app.route('/api/create-payment-link', methods=['POST'])
+@limiter.limit("10 per minute")
 def create_payment_link():
     data = request.json
     try:

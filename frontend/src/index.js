@@ -20,16 +20,6 @@ import LanguageSwitcher from './LanguageSwitcher'; // Importer le composant Lang
 import HelmetPageInfo from './pageInfo'; // Importer le composant PageInfo
 import HeaderDashboard2 from './openai_product/header_dashboard2';
 
-// Ajoutez cette fonction pour inclure les en-têtes CORS dans les requêtes fetch globalement
-const originalFetch = window.fetch;
-window.fetch = function (url, options = {}) {
-  options.headers = {
-    ...options.headers,
-    'Access-Control-Allow-Origin': 'http://localhost:3000' || 'https://fineurai.com',
-  };
-  return originalFetch(url, options);
-};
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

@@ -11,6 +11,10 @@ from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 import traceback
 from datetime import datetime, timedelta
 import logging
+from flask_cors import CORS
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from flask_talisman import Talisman
 
 # Ajoutez le chemin du dossier backend au PYTHONPATH
 import sys
@@ -32,13 +36,25 @@ serializer = URLSafeTimedSerializer(os.getenv("SECRET_KEY"))
 
 supabase = get_supabase_client()
 
-stripe.api_key = os.getenv('stripe_key_test_backend')
 
-stripe.api_key = str(os.getenv("stripe_key_test_backend"))# Initialiser la gestion du chat
+
+stripe.api_key = str(os.getenv("stripe_key_backend"))
 
 
 PRODUCT_ID = (os.getenv("stripe_product_ID"))  # Remplacez par l'ID de votre produit
 
+# -------------------------Security--------------------------------
+
+
+
+
+@app.route('/api/check-backend-status', methods=['GET'])
+def check_backend_status():
+    response = jsonify({"status": "ok"})
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
 
 # -------------------------Product--------------------------------
 

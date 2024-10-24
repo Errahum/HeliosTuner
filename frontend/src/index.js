@@ -19,11 +19,13 @@ import './i18n'; // Importer la configuration i18n
 import LanguageSwitcher from './LanguageSwitcher'; // Importer le composant LanguageSwitcher
 import HelmetPageInfo from './pageInfo'; // Importer le composant PageInfo
 import HeaderDashboard2 from './openai_product/header_dashboard2';
+import BackendStatusChecker from './backend-check/BackendStatusChecker';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Router>
+      <BackendStatusChecker>
       <LanguageSwitcher /> {/* Ajouter le composant LanguageSwitcher */}
       <HelmetPageInfo />
       <Routes>
@@ -76,6 +78,7 @@ root.render(
           <Footer/>
           </>} />
       </Routes>
+      </BackendStatusChecker>
     </Router>
   </React.StrictMode>
 );

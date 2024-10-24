@@ -18,7 +18,7 @@ const HeaderDashboard2 = () => {
             <div className="dashboard-header">
                 <img src={logo} className="logo" alt="logo" />
                 <div className={`menu ${menuOpen ? 'open' : ''}`}>
-                    <a className="tools" href="/home">{t('header_dashboard.home')}</a>
+                    <a className="tools" href="/">{t('header_dashboard.home')}</a>
                 </div>
                 <button className="hamburger" onClick={toggleMenu}>
                     &#9776; {/* Unicode for hamburger icon */}

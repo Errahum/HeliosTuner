@@ -42,6 +42,7 @@ stripe.api_key = str(os.getenv("stripe_key_test_backend"))
 PRODUCT_ID = (os.getenv("stripe_product_ID"))  # Remplacez par l'ID de votre produit
 
 # -------------------------Security--------------------------------
+frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
 csp = {
     'default-src': [
@@ -93,13 +94,13 @@ limiter = Limiter(
     default_limits=["200 per day", "50 per hour"]
 )
 
-CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "http://localhost:3000"}},
+CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": frontend_url}},
      allow_headers=["Content-Type", "Authorization", "Access-Control-Allow-Origin"])
 
 
 @app.after_request
 def add_cors_headers(response):
-    response.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+    response.headers['Access-Control-Allow-Origin'] = frontend_url
     response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
     response.headers['Access-Control-Allow-Headers'] = 'Authorization, Content-Type'
     response.headers['Access-Control-Allow-Credentials'] = 'true'  # Si tu utilises des cookies de session

@@ -12,10 +12,19 @@ function Account() {
   const [deleteMessage, setDeleteMessage] = useState(''); // Ajoutez cet état
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const url = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+  // url+
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const response = await fetch('/api/user-info');
+      const response = await fetch(url+'/api/user-info', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+        },
+        credentials: 'include', // Inclure les cookies de session
+      });
       if (!response.ok) {
         navigate('/payment');
         return;
@@ -23,7 +32,14 @@ function Account() {
       const data = await response.json();
       setEmail(data.email);
 
-      const paymentStatusResponse = await fetch(`/api/check-payment-status?email=${data.email}`);
+      const paymentStatusResponse = await fetch(url+`/api/check-payment-status?email=${data.email}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+        },
+        credentials: 'include', // Inclure les cookies de session
+      });
       const paymentStatusData = await paymentStatusResponse.json();
       if (!paymentStatusData.hasPaid) {
         navigate('/payment');
@@ -32,7 +48,14 @@ function Account() {
     };
 
     async function fetchSubscriptionInfo() {
-      const response = await fetch('/api/get-subscription-info');
+      const response = await fetch(url+'/api/get-subscription-info', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+        },
+        credentials: 'include', // Inclure les cookies de session
+      });
       const data = await response.json();
       setSubscriptionPlan(data.subscriptionPlan);
       setNextPaymentDate(data.nextPaymentDate);
@@ -42,7 +65,7 @@ function Account() {
 
     fetchUserInfo();
     fetchSubscriptionInfo();
-  }, [navigate]);
+  }, [navigate, url]);
 
   const handleChangeSubscription = () => {
     navigate('/payment');
@@ -53,18 +76,30 @@ function Account() {
     if (window.confirm(warningMessage)) {
       const userEmail = prompt('Please enter your email to confirm cancellation:');
       if (userEmail === email) {
-        await fetch('/api/cancel-subscription', { method: 'POST' });
+        await fetch(url+'/api/cancel-subscription', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+          },
+          credentials: 'include', // Inclure les cookies de session
+        });
         navigate('/home');
       } else {
         alert('Email does not match. Cancellation aborted.');
       }
     }
   };
+
   const deleteChatHistory = async () => {
     try {
-        const response = await fetch('/api/chat-completion/delete-chat-history', {
+        const response = await fetch(url+'/api/chat-completion/delete-chat-history', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+          },
+          credentials: 'include', // Inclure les cookies de session
         });
         const data = await response.json();
         if (response.ok) {
@@ -108,6 +143,8 @@ return (
       <button className="account-button-grey" onClick={handleCancelPlan}>
         {t('account.cancel_plan')}
       </button>
+      <div className="spacer_account"></div>
+      <div className="spacer_account"></div>
     </div>
     <div className="spacer_account"></div>
   </div>

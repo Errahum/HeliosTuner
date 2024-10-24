@@ -14,19 +14,34 @@ function JsonlCreatorApp() {
   const [jsonlFileContent, setJsonlFileContent] = useState([]); // Stores JSONL content
   const [rawJsonlContent, setRawJsonlContent] = useState(''); // Stores raw JSONL content as string
   const [errorMessage, setErrorMessage] = useState(''); // Stores error messages
-
+  const url = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+  // url+
   const navigate = useNavigate();
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
-                const response = await fetch('/api/user-info');
+                const response = await fetch(url+'/api/user-info', {
+                  method: 'GET',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+                  },
+                  credentials: 'include', // Inclure les cookies de session
+                });
                 const data = await response.json();
                 if (!response.ok) {
                     setMessage(data.error);
                     navigate('/payment');
                     return;
                 }
-                const paymentStatusResponse = await fetch(`/api/check-payment-status?email=${data.email}`);
+                const paymentStatusResponse = await fetch(url+`/api/check-payment-status?email=${data.email}`, {
+                  method: 'GET',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+                  },
+                  credentials: 'include', // Inclure les cookies de session
+                });
                 const paymentStatusData = await paymentStatusResponse.json();
                 if (!paymentStatusData.hasPaid) {
                     navigate('/payment');

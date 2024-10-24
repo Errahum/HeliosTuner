@@ -32,13 +32,3 @@ def cancel_all_subscriptions(email):
     except ValueError as e:
         print(e)
 
-# if __name__ == "__main__":
-#     # Email du client de test
-#     test_customer_email = 
-    
-#     # Annuler tous les abonnements du client de test
-#     try:
-#         cancel_all_subscriptions(test_customer_email)
-#         print(f"Tous les abonnements du client {test_customer_email} ont été annulés avec succès.")
-#     except ValueError as e:
-#         print(e)

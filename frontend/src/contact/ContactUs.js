@@ -10,12 +10,20 @@ function ContactUs() {
   const [status, setStatus] = useState('');
   const navigate = useNavigate();
   const { t } = useTranslation();
-
+  const url = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+  // url+
   useEffect(() => {
     // Fetch user session info
     const fetchUserInfo = async () => {
       try {
-        const response = await fetch('/api/user-info');
+        const response = await fetch(url+'/api/user-info', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+          },
+          credentials: 'include', // Inclure les cookies de session
+        });
         if (response.ok) {
           const data = await response.json();
           setEmail(data.email);
@@ -28,7 +36,7 @@ function ContactUs() {
     };
 
     fetchUserInfo();
-  }, [navigate]);
+  }, [navigate,url]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,11 +48,12 @@ function ContactUs() {
     }
   
     try {
-      const response = await fetch('/api/contact-us', {
+      const response = await fetch(url+'/api/contact-us', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({ subject, email, message }),
       });
   

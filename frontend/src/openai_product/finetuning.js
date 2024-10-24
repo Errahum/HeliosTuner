@@ -32,17 +32,32 @@ function FineTuningApp() {
         'gpt-4o-realtime-preview', 'gpt-4o-realtime-preview-2024-10-01', 'babbage-002', 
         'davinci-002', 'o1-preview-2024-09-12', 'o1-preview'
     ];
-    
+    const url = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+    // url+
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
-                const response = await fetch('/api/user-info');
+                const response = await fetch(url+'/api/user-info', {
+                    method: 'GET',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+                    },
+                    credentials: 'include', // Inclure les cookies de session
+                  });
                 const data = await response.json();
                 if (response.ok) {
                     setUserId(data.user_id);
                     setEmail(data.email);
                 }
-                const paymentStatusResponse = await fetch(`/api/check-payment-status?email=${data.email}`);
+                const paymentStatusResponse = await fetch(url+`/api/check-payment-status?email=${data.email}`, {
+                    method: 'GET',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+                    },
+                    credentials: 'include', // Inclure les cookies de session
+                  });
                 const paymentStatusData = await paymentStatusResponse.json();
                 if (!paymentStatusData.hasPaid) {
                     navigate('/payment');
@@ -54,7 +69,7 @@ function FineTuningApp() {
         };
         fetchUserInfo();
         // getAllJobs();
-    }, [navigate]);
+    }, [navigate, url]);
 
 
     const startFineTuning = async () => {
@@ -64,9 +79,12 @@ function FineTuningApp() {
         }
         try {
             setLoading(true); // Commence le chargement
-            const response = await fetch('/api/fine-tuning/start', {
+            const response = await fetch(url+'/api/fine-tuning/start', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+
+                 },
                 body: JSON.stringify({
                     model: suggestedModel,
                     name: fineTuningModelName,
@@ -76,7 +94,9 @@ function FineTuningApp() {
                     batch_size: parseInt(batchSize),
                     training_data_path: fileUrl,
                     email: email
-                })
+                }),
+                credentials: 'include', // Inclure les cookies de session
+
             });
             const data = await response.json();
             if (response.ok) {
@@ -100,7 +120,14 @@ function FineTuningApp() {
     const checkJobCompletion = async (jobId) => {
         try {
             const interval = setInterval(async () => {
-                const response = await fetch(`/api/fine-tuning/jobs/${jobId}/status`);
+                const response = await fetch(url+`/api/fine-tuning/jobs/${jobId}/status`, {
+                    method: 'GET',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+                    },
+                    credentials: 'include', // Inclure les cookies de session
+                  });
                 const data = await response.json();
                 if (response.ok) {
                     if (data.status === 'succeeded') {
@@ -124,7 +151,14 @@ function FineTuningApp() {
     };
     const getAllJobs = async () => {
         try {
-            const response = await fetch('/api/fine-tuning/jobs');
+            const response = await fetch(url+'/api/fine-tuning/jobs', {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+                },
+                credentials: 'include', // Inclure les cookies de session
+              });
             const data = await response.json();
             if (response.ok) {
                 setJobIds(data.job_ids);
@@ -141,10 +175,15 @@ function FineTuningApp() {
             // Extract job ID from the selected job string
             const jobId = selectedJobId.split(' ').pop(); // Assuming the job ID is the last part of the string
     
-            const response = await fetch('/api/fine-tuning/jobs/cancel', {
+            const response = await fetch(url+'/api/fine-tuning/jobs/cancel', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ job_id: jobId })
+                headers: { 'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+
+                 },
+                body: JSON.stringify({ job_id: jobId }),
+                credentials: 'include', // Inclure les cookies de session
+
             });
             const data = await response.json();
             if (response.ok) {
@@ -160,11 +199,15 @@ function FineTuningApp() {
         }
     };
     window.addEventListener('beforeunload', async (event) => {
-        await fetch('/api/fine-tuning/delete-all-temp-files', {
+        await fetch(url+'/api/fine-tuning/delete-all-temp-files', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-            }
+                'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+
+            },
+            credentials: 'include', // Inclure les cookies de session
+
         });
     });
     
@@ -176,18 +219,27 @@ function FineTuningApp() {
             formData.append('user_id', userId);  // Use dynamic user_id
     
             // Delete all temporary files before uploading a new one
-            await fetch('/api/fine-tuning/delete-all-temp-files', {
+            await fetch(url+'/api/fine-tuning/delete-all-temp-files', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                }
+                    'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+
+                },
+                credentials: 'include', // Inclure les cookies de session
+
             });
     
             try {
-                const response = await fetch('/api/fine-tuning/upload', {
+                const response = await fetch(url+'/api/fine-tuning/upload', {
                     method: 'POST',
-                    body: formData
-                });
+                    body: formData,
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+                    },
+                    credentials: 'include', // Inclure les cookies de session
+                  });
                 const data = await response.json();
                 if (response.ok) {
                     setFileUrl(data.file_url);
@@ -197,7 +249,7 @@ function FineTuningApp() {
                 } else {
                     setMessage(data.error);
                     // Ensure the temporary file is not used if the upload fails
-                    await fetch('/api/fine-tuning/delete-temp-file', {
+                    await fetch(url+'/api/fine-tuning/delete-temp-file', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -208,12 +260,16 @@ function FineTuningApp() {
             } catch (error) {
                 setMessage('Error uploading file');
                 // Ensure the temporary file is not used if an error occurs
-                await fetch('/api/fine-tuning/delete-temp-file', {
+                await fetch(url+'/api/fine-tuning/delete-temp-file', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+
                     },
-                    body: JSON.stringify({ fileName: `temp_${file.name}` })
+                    body: JSON.stringify({ fileName: `temp_${file.name}` }),
+                    credentials: 'include', // Inclure les cookies de session
+
                 });
             }
         }

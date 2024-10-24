@@ -36,7 +36,7 @@ serializer = URLSafeTimedSerializer(os.getenv("SECRET_KEY"))
 
 supabase = get_supabase_client()
 
-stripe.api_key = str(os.getenv("stripe_key_backend"))
+stripe.api_key = str(os.getenv("stripe_key_test_backend"))
 
 
 PRODUCT_ID = (os.getenv("stripe_product_ID"))  # Remplacez par l'ID de votre produit
@@ -174,8 +174,6 @@ def get_subscription_info():
     except Exception as e:
         logging.error(f"Error: {e}")
         return jsonify({'error': str(e)}), 500
-    
-
 
 @app.route('/api/cancel-subscription', methods=['POST'])
 @limiter.limit("1 per minute")
@@ -668,7 +666,7 @@ def check_payment_status():
 
 
 @app.route('/api/webhook', methods=['POST'])
-@limiter.limit("10 per minute")
+@limiter.limit("500 per minute")
 def webhook():
     payload = request.get_data(as_text=True)
     sig_header = request.headers.get('Stripe-Signature')
@@ -704,8 +702,16 @@ def webhook():
             
             update_subscription_status(subscription_id, status)
 
-
-
+            # Vérification avec Stripe si le statut est "draft"
+            if status == 'draft':
+                customer_id = subscription.get('customer')
+                customer = stripe.Customer.retrieve(customer_id)
+                if customer.get('subscriptions').get('data'):
+                    for sub in customer['subscriptions']['data']:
+                        if sub['id'] == subscription_id and sub['status'] == 'active':
+                            status = 'active'
+                            update_subscription_status(subscription_id, status)
+                            break
 
         if event_type.startswith("invoice.") or event_type.startswith("customer.subscription."):
             invoice = event['data']['object']

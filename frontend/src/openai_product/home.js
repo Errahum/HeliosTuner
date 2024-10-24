@@ -4,7 +4,8 @@ import './home.css';
 import img1 from '../images/design-imag2.svg';
 import Footer from '../Footer';
 import { useTranslation } from 'react-i18next';
-
+const url = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+// url+
 
 
 const Home = () => {
@@ -14,7 +15,14 @@ const Home = () => {
   useEffect(() => {
     const fetchUserInfo = async () => {
    
-            const response = await fetch('/api/user-info');
+            const response = await fetch(url+'/api/user-info', {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+              },
+              credentials: 'include', // Inclure les cookies de session
+            });
             if (!response.ok) {
                 navigate('/payment');
                 return;

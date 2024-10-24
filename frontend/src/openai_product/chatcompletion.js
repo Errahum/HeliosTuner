@@ -27,18 +27,33 @@ function ChatCompletionApp() {
         'gpt-4o-realtime-preview', 'gpt-4o-realtime-preview-2024-10-01', 'babbage-002', 
         'davinci-002', 'o1-preview-2024-09-12', 'o1-preview'
     ];
-
+    const url = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+    // url+
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
-                const response = await fetch('/api/user-info');
+                const response = await fetch(url+'/api/user-info', {
+                    method: 'GET',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+                    },
+                    credentials: 'include', // Inclure les cookies de session
+                  });
                 const data = await response.json();
                 if (!response.ok) {
                     setMessage(data.error);
                     navigate('/payment');
                     return;
                 }
-                const paymentStatusResponse = await fetch(`/api/check-payment-status?email=${data.email}`);
+                const paymentStatusResponse = await fetch(url+`/api/check-payment-status?email=${data.email}`, {
+                    method: 'GET',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+                    },
+                    credentials: 'include', // Inclure les cookies de session
+                  });
                 const paymentStatusData = await paymentStatusResponse.json();
                 if (!paymentStatusData.hasPaid) {
                     navigate('/payment');
@@ -50,7 +65,7 @@ function ChatCompletionApp() {
         };
         fetchUserInfo();
         // getAllJobs();
-    }, [navigate]);
+    }, [navigate, url]);
 
     const sendChatRequest = async () => {
     if (blockedModels.includes(model)) {
@@ -60,9 +75,13 @@ function ChatCompletionApp() {
         try {
             setIsLoading(true);
             const stopList = stop ? stop.split(',').map(s => s.trim()) : null;
-            const response = await fetch('/api/chat-completion/create', {
+
+            const response = await fetch(url+'/api/chat-completion/create', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+
+                 },
                 body: JSON.stringify({
                     user_message: userMessage,
                     max_tokens: maxTokens,
@@ -70,7 +89,8 @@ function ChatCompletionApp() {
                     temperature: temperature,
                     stop: stopList,
                     window_size: windowSize
-                })
+                }, ),
+                credentials: 'include',
             });
 
 
@@ -91,7 +111,14 @@ function ChatCompletionApp() {
 
     const getAllJobs = async () => {
         try {
-            const response = await fetch('/api/fine-tuning/jobs');
+            const response = await fetch(url+'/api/fine-tuning/jobs', {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+                },
+                credentials: 'include', // Inclure les cookies de session
+              });
             const data = await response.json();
             if (response.ok) {
                 setJobIds(data.job_ids);
@@ -105,10 +132,14 @@ function ChatCompletionApp() {
 
     const copyModelName = async () => {
         try {
-            const response = await fetch('/api/fine-tuning/copy-model-name', {
+            const response = await fetch(url+'/api/fine-tuning/copy-model-name', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ job_info: selectedJobId })
+                headers: { 'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+
+                 },
+                body: JSON.stringify({ job_info: selectedJobId }),
+                credentials: 'include', // Inclure les cookies de session
             });
             const data = await response.json();
             if (response.ok) {
@@ -125,7 +156,14 @@ function ChatCompletionApp() {
 
     const getLatestResponse = async () => {
         try {
-            const response = await fetch('/api/chat-completion/response');
+            const response = await fetch(url+'/api/chat-completion/response', {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+                },
+                credentials: 'include', // Inclure les cookies de session
+              });
             const data = await response.json();
             if (response.ok) {
                 setResponse(data.response);
@@ -138,9 +176,13 @@ function ChatCompletionApp() {
     };
     const deleteChatHistory = async () => {
         try {
-            const response = await fetch('/api/chat-completion/delete-chat-history', {
+            const response = await fetch(url+'/api/chat-completion/delete-chat-history', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
+                headers: { 'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+
+                 },
+                credentials: 'include', // Inclure les cookies de session
             });
             const data = await response.json();
             if (response.ok) {

@@ -149,6 +149,7 @@ function PaymentPage() {
         'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
       },
       credentials: 'include', // Inclure les cookies de session
+      body: JSON.stringify({ price_id: priceId }),
     });
     const data = await response.json();
     if (data.url) {

@@ -1,0 +1,28 @@
+{
+  "monthly": {
+    "price_1Q0nYyAeHcU4N7RPIkPVtN6k": {
+      "id": "price_1Q0nYyAeHcU4N7RPIkPVtN6k",
+      "name": "Starter Plan",
+      "type": "",
+      "description": "",
+      "price": 19,
+      "currency": "$",
+      "details": "+ Training File Creator \\n\\n + Access to the OpenAI fine-tuning platform \\n\\n + Public access to all models \\n\\n + Conversation history \\n\\n + Regular updates \\n\\n + 400 000 tokens",
+      "comment": "per month",
+      "tokens": 400000
+    }
+  },
+  "yearly": {
+    "price_1Q0nZeAeHcU4N7RPnbobJk8s": {
+      "id": "price_1Q0nZeAeHcU4N7RPnbobJk8s",
+      "name": "Starter Plan",
+      "type": "6+ months free \\n billed yearly $98",
+      "description": "",
+      "price": 8,
+      "currency": "$",
+      "details": "+ Training File Creator \\n\\n + Access to the OpenAI fine-tuning platform \\n\\n + Public access to all models \\n\\n + Conversation history \\n\\n + Regular updates \\n\\n + 5 millions tokens",
+      "comment": "per month",
+      "tokens": 5000000
+    }
+  }
+}

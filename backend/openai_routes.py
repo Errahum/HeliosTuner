@@ -117,7 +117,21 @@ def start_fine_tuning():
             return jsonify({'error': 'No email in session'}), 400
 
         data = request.json
+        
+        # Liste des modèles bloqués
+        blocked_models = [
+            'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-4-turbo-preview', 'gpt-4-vision-preview', 
+            'gpt-4-turbo-2024-04-09', 'gpt-4-0314', 'gpt-4-32k-0314', 'gpt-4-32k-0613', 
+            'chatgpt-4o-latest', 'gpt-4-turbo', 'gpt-4-turbo-2024-04-09', 'gpt-4', 'gpt-4-32k', 
+            'gpt-4-0125-preview', 'gpt-4-1106-preview', 'gpt-4-vision-preview', 
+            'gpt-4o-realtime-preview', 'gpt-4o-realtime-preview-2024-10-01', 'babbage-002', 
+            'davinci-002', 'o1-preview-2024-09-12', 'o1-preview'
+        ]
 
+        # Vérifier si le modèle est bloqué
+        if data['model'] in blocked_models:
+            return jsonify({"error": "The selected model is not allowed."}), 403
+        
         # Validate input data for fine-tuning parameters
         required_fields = ['model', 'name', 'seed', 'n_epochs', 'learning_rate', 'batch_size']
         for field in required_fields:
@@ -416,6 +430,20 @@ def create_chat_completion():
         temperature = data.get('temperature')
         stop = data.get('stop')
         window_size = data.get('window_size')
+
+        # Liste des modèles bloqués
+        blocked_models = [
+            'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-4-turbo-preview', 'gpt-4-vision-preview', 
+            'gpt-4-turbo-2024-04-09', 'gpt-4-0314', 'gpt-4-32k-0314', 'gpt-4-32k-0613', 
+            'chatgpt-4o-latest', 'gpt-4-turbo', 'gpt-4-turbo-2024-04-09', 'gpt-4', 'gpt-4-32k', 
+            'gpt-4-0125-preview', 'gpt-4-1106-preview', 'gpt-4-vision-preview', 
+            'gpt-4o-realtime-preview', 'gpt-4o-realtime-preview-2024-10-01', 'babbage-002', 
+            'davinci-002', 'o1-preview-2024-09-12', 'o1-preview'
+        ]
+
+        # Vérifier si le modèle est bloqué
+        if model in blocked_models:
+            return jsonify({"error": "The selected model is not allowed."}), 403
 
         # Définir le seuil de tokens requis
         tokens_needed = max_tokens  # Seuil pour la création de chat completion

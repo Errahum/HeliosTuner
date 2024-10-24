@@ -236,6 +236,7 @@ function FineTuningApp() {
                 <div className="top-right-section">
                     <h2>{t('finetuning.important')}</h2>
                     <ul>
+                        <li>• {t('finetuning.public_access')}</li>
                         <li>• {t('finetuning.valid_jsonl_file')}</li>
                         <li>• {t('finetuning.use_trained_model')}</li>
                         <li>• {t('finetuning.token_cost_calculated')}</li>

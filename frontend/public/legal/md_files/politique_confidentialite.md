@@ -31,6 +31,10 @@ Conformément à la Charte de la langue française (Loi 101), nous vous offrons 
 
 En vertu de la Loi sur la protection du consommateur du Québec, vous avez certains droits concernant les produits et services que vous achetez. Ces droits incluent, sans s'y limiter, le droit à des informations claires et précises sur les produits et services, le droit à la protection contre les pratiques commerciales trompeuses et le droit à des recours en cas de problème avec un produit ou service. Pour plus d'informations sur vos droits en tant que consommateur, veuillez consulter le site de l'Office de la protection du consommateur du Québec.
 
+### Accès aux modèles de fine-tuning
+
+Tout le monde a accès aux modèles de fine-tuning. Nous nous engageons à fournir un accès équitable à ces modèles pour tous les utilisateurs avec le "Starter Plan", conformément à nos politiques de confidentialité et de sécurité.
+
 ## Confidentialité
 
 Nous nous soucions de la confidentialité de nos Utilisateurs. Vous comprenez qu'en utilisant les Services, vous consentez à la collecte, l'utilisation et la divulgation de vos informations personnellement identifiables et des données agrégées et/ou anonymisées comme indiqué dans notre [page de confidentialité], et à ce que vos informations personnellement identifiables soient collectées, utilisées, transférées et traitées au Canada, au Québec.

@@ -34,7 +34,6 @@ function FineTuningApp() {
     ];
     
     useEffect(() => {
-        getAllJobs();
         const fetchUserInfo = async () => {
             try {
                 const response = await fetch('/api/user-info');
@@ -54,7 +53,7 @@ function FineTuningApp() {
             }
         };
         fetchUserInfo();
-        getAllJobs();
+        // getAllJobs();
     }, [navigate]);
 
 
@@ -322,13 +321,13 @@ function FineTuningApp() {
                 </div>
                 <div className="finetuning-bottom-section">
                     <button className="finetuning-button-orange" onClick={getAllJobs}>{t('finetuning.refresh_models')}</button>
-                    <button className="finetuning-button-grey" onClick={cancelJob}>{t('finetuning.cancel_model')}</button>
+                    {/* <button className="finetuning-button-grey" onClick={cancelJob}>{t('finetuning.cancel_model')}</button> */}
                 </div>
                 <div className="finetuning-jobs">
                     <h2>{t('finetuning.job_ids')}</h2>
-                    <p>{t('finetuning.select_job_id_to_cancel')}</p>
+                    {/* <p>{t('finetuning.select_job_id_to_cancel')}</p> */}
                     <select className="finetuning-select" onChange={(e) => setSelectedJobId(e.target.value)}>
-                        <option value="">{t('finetuning.select_job_id_to_cancel')}</option>
+                        {/* <option value="">{t('finetuning.select_job_id_to_cancel')}</option> */}
                         {jobIds.map(id => {
                             let modelName = id.split(':')[4] + ':' + id.split(':')[5];
                             modelName = modelName.replace('- Model', '');

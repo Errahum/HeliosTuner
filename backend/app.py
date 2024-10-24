@@ -12,6 +12,10 @@ import traceback
 from datetime import datetime, timedelta
 import logging
 
+# Ajoutez le chemin du dossier backend au PYTHONPATH
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
+
 from stripe_cancel_sub import cancel_all_subscriptions, get_customer_ids_by_email
 from supabase_client import get_supabase_client
 from openai_routes import fine_tuning_bp, chat_completion_bp, get_plan_tokens, jsonl_bp
@@ -233,8 +237,13 @@ def send_magic_link_to_email(email):
         # Générer un token avec itsdangerous (expirant après 10 minutes)
         token = serializer.dumps(email, salt='email-confirm-salt')
 
+        port = int(os.getenv("PORT", 5000))
+        if port == 5000:
+            link = f"http://localhost:3000/payment?token={token}&email={email}"
+        else:
+            link = f"https://fineurai.com/payment?token={token}&email={email}"
         # Construire le lien avec le token
-        link = f"http://localhost:3000/payment?token={token}&email={email}"
+        
 
         # Envoyer l'email via Supabase (utilisation d'OTP pour un lien de connexion magique)
         response = supabase.auth.sign_in_with_otp({
@@ -642,3 +651,8 @@ def webhook():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    port = int(os.getenv("PORT", 5000))
+    if port == 5000:
+        app.run(debug=True)
+    else:
+        app.run(host='0.0.0.0', port=port, debug=False)

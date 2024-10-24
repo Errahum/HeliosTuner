@@ -7,7 +7,7 @@
       "description": "",
       "price": 19,
       "currency": "$",
-      "details": "+ Training File Creator \\n\\n + Access to the OpenAI fine-tuning platform \\n\\n + Public access to all models \\n\\n + Conversation history \\n\\n + Regular updates \\n\\n + 50 000 tokens",
+      "details": "+ Training File Creator \\n\\n + Access to the OpenAI fine-tuning platform \\n\\n + Public access to all models \\n\\n + Conversation history \\n\\n + Regular updates \\n\\n + 400 000 tokens",
       "comment": "per month",
       "tokens": 400000
     }
@@ -20,7 +20,7 @@
       "description": "",
       "price": 8,
       "currency": "$",
-      "details": "+ Training File Creator \\n\\n + Access to the OpenAI fine-tuning platform \\n\\n + Public access to all models \\n\\n + Conversation history \\n\\n + Regular updates \\n\\n + 1 million tokens",
+      "details": "+ Training File Creator \\n\\n + Access to the OpenAI fine-tuning platform \\n\\n + Public access to all models \\n\\n + Conversation history \\n\\n + Regular updates \\n\\n + 5 millions tokens",
       "comment": "per month",
       "tokens": 5000000
     }

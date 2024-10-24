@@ -49,7 +49,7 @@ function ChatCompletionApp() {
             }
         };
         fetchUserInfo();
-        getAllJobs();
+        // getAllJobs();
     }, [navigate]);
 
     const sendChatRequest = async () => {

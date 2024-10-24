@@ -36,7 +36,7 @@ serializer = URLSafeTimedSerializer(os.getenv("SECRET_KEY"))
 
 supabase = get_supabase_client()
 
-stripe.api_key = str(os.getenv("stripe_key_test_backend"))
+stripe.api_key = str(os.getenv("stripe_key_backend"))
 
 
 PRODUCT_ID = (os.getenv("stripe_product_ID"))  # Remplacez par l'ID de votre produit

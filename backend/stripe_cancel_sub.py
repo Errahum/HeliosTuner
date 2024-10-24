@@ -2,7 +2,7 @@ import stripe
 import os
 
 # Configurez votre clé API Stripe
-stripe.api_key = os.getenv("stripe_key_test_backend")
+stripe.api_key = os.getenv("stripe_key_backend")
 
 # Vérifiez que la clé API est correctement récupérée
 if not stripe.api_key:

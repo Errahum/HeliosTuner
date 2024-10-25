@@ -105,7 +105,7 @@ app.config.update(
     SESSION_COOKIE_SECURE=True,
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE='None',
-    SESSION_COOKIE_DOMAIN=".fineurai.com"
+    SESSION_COOKIE_DOMAIN=None
 )
 
 # Add CORS headers after each request
@@ -314,13 +314,13 @@ def is_valid_email(email):
 def send_magic_link():
     data = request.json
     email = data.get('email')
-    captcha_token = data.get('captchaToken')
+    # captcha_token = data.get('captchaToken')
 
-    if not email or not captcha_token:
-        return jsonify({"message": "Email and captcha token are required"}), 400
+    # if not email or not captcha_token:
+    #     return jsonify({"message": "Email and captcha token are required"}), 400
     
-    # if not email:
-    #     return jsonify({"message": "Email is required"}), 400
+    if not email:
+        return jsonify({"message": "Email is required"}), 400
 
     if not is_valid_email(email):
         return jsonify({"message": "Invalid email format"}), 400
@@ -422,10 +422,13 @@ def verify_magic_link():
                 
                 # Store JWT token in session or return it in response
                 session['jwt_token'] = jwt_token
-
                 session['email'] = email
+
+                # Set the session cookie
+                response = jsonify({"message": "Magic link verified successfully!", "token": jwt_token})
+                response.set_cookie('session', session.sid, httponly=True, secure=True, samesite='None')
                 logging.info({"message": "Magic link verified successfully!", "token": jwt_token})
-                return jsonify({"message": "Magic link verified successfully!", "token": jwt_token}), 200
+                return response, 200
 
             # Convertir les objets datetime en chaînes de caractères
             created_at = datetime.utcnow().isoformat()
@@ -447,8 +450,13 @@ def verify_magic_link():
             
             # Store JWT token in session or return it in response
             session['jwt_token'] = jwt_token
+            session['email'] = email
+
+            # Set the session cookie
+            response = jsonify({"message": "Magic link verified successfully!", "token": jwt_token})
+            response.set_cookie('session', session.sid, httponly=True, secure=True, samesite='None')
             logging.info({"message": "Magic link verified successfully!", "token": jwt_token})
-            return jsonify({"message": "Magic link verified successfully!", "token": jwt_token}), 200
+            return response, 200
         else:
             return jsonify({"message": "Invalid email or token"}), 400
     except SignatureExpired:

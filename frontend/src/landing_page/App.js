@@ -6,10 +6,11 @@ import img1 from '../images/design-image.svg';
 import img2 from '../images/design-imag2.svg';
 import BlockCards from './BlockCards';
 import { useTranslation } from 'react-i18next';
+import { Turnstile } from '@marsidev/react-turnstile'
 const url = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
 // url+
 
-async function sendMagicLink(email) {
+async function sendMagicLink(email, captchaToken) {
   try {
     console.log("Sending magic link to:", email); // Log email before sending request
     alert(`Sending magic link to: ${email}`); // Message box before sending request
@@ -19,7 +20,7 @@ async function sendMagicLink(email) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email, captchaToken }),
     });
 
     const result = await response.json();
@@ -38,7 +39,12 @@ async function sendMagicLink(email) {
 function App() {
   const [email, setEmail] = useState('');
   const { t } = useTranslation();
+  const [captchaToken, setCaptchaToken] = useState();
+  const [isEmailFocused, setIsEmailFocused] = useState(false);
 
+  const handleCaptchaSuccess = (token) => {
+    setCaptchaToken(token);
+  };
   const [faqVisibility, setFaqVisibility] = useState({
     faq1: false,
     faq2: false,
@@ -52,7 +58,15 @@ function App() {
       [faq]: !prevState[faq],
     }));
   };
-  
+
+  const handleSubmit = () => {
+    if (captchaToken) {
+      sendMagicLink(email, captchaToken);
+    } else {
+      alert("Please complete the captcha.");
+    }
+  };
+
   return (
     <div className="App">
       <Helmet>
@@ -75,13 +89,20 @@ function App() {
             <p>{t('landing.provide_email')}</p>
             <p>{t('landing.agree_privacy_policy')} <a href="/privacy-policy" className="no-blue-link">{t('landing.privacy_policy')}</a> {t('landing.and')} <a href="/terms-of-service" className="no-blue-link">{t('landing.terms_of_service')}</a></p>
             <p></p>
-              <input
+            <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              onFocus={() => setIsEmailFocused(true)}
               placeholder={t('landing.type_email')}
             />
-            <button onClick={() => sendMagicLink(email)}>{t('landing.create_ai_model')}</button>
+            {isEmailFocused && (
+              <Turnstile
+                siteKey="0x4AAAAAAAxwLFOtAMwTvtgs"
+                onSuccess={handleCaptchaSuccess}
+              />
+            )}
+            <button onClick={handleSubmit}>{t('landing.create_ai_model')}</button>
           </div>
         </div>
       </header>

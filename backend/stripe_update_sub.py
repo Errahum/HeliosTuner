@@ -64,7 +64,7 @@ def upsert_subscription_in_db(supabase, email, subscription_id, customer_id, sta
 
     return response
 
-def check_and_update_subscriptions():
+def check_and_update_subscriptions_error():
     supabase = get_supabase_client()
     payment_links = load_payment_links()
 

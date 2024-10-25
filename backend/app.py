@@ -44,9 +44,10 @@ PRODUCT_ID = (os.getenv("stripe_product_ID"))  # Remplacez par l'ID de votre pro
 # -------------------------Security--------------------------------
 
 app.config.update(
-    SESSION_COOKIE_SECURE=True,  # Assurez-vous que les cookies sont sécurisés
-    SESSION_COOKIE_HTTPONLY=True,  # Empêche l'accès aux cookies via JavaScript
-    SESSION_COOKIE_SAMESITE='Lax'  # Empêche l'envoi des cookies avec les requêtes cross-site
+    SESSION_COOKIE_SECURE=True,
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE='None',
+    SESSION_COOKIE_DOMAIN=".fineurai.com"
 )
 
 frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
@@ -103,7 +104,6 @@ limiter = Limiter(
 
 CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": frontend_url}},
      allow_headers=["Content-Type", "Authorization", "Access-Control-Allow-Origin"])
-
 
 @app.after_request
 def add_cors_headers(response):

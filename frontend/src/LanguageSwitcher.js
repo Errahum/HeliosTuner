@@ -1,9 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import './LanguageSwitcher.css';
-import { ReactComponent as USFlag } from './images/us.svg';
-import { ReactComponent as FranceFlag } from './images/France.svg';
-
+import USFlag from './images/US.svg';
+import FranceFlag from './images/France.svg';
 const LanguageSwitcher = () => {
   const { i18n } = useTranslation();
 
@@ -14,10 +13,10 @@ const LanguageSwitcher = () => {
   return (
     <div className='languageswitch_cont'>
       <button onClick={() => changeLanguage('fr')}>
-        <FranceFlag width="30" height="20" />
+        <img src={FranceFlag} width="35" height="25" alt="French Flag" />
       </button>
       <button onClick={() => changeLanguage('en')}>
-        <USFlag width="30" height="20" />
+        <img src={USFlag} width="35" height="25" alt="US Flag" />
       </button>
     </div>
   );

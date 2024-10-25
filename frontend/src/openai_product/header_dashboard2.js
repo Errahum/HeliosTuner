@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './header_dashboard.css';
-import logo from '../logo.svg';
+import logo from '../images/logo.svg';
 
 import { useTranslation } from 'react-i18next';
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './header_dashboard.css';
 import img1 from '../images/design-image.svg';
-import logo from '../logo.svg';
+import logo from '../images/logo.svg';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 const url = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';

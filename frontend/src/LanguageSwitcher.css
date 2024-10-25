@@ -5,16 +5,19 @@
 }
 
 .languageswitch_cont button {
-    background-color: #FFA500;
+    background-color: #ffa60057;
     border: none;
-
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
+    margin: 10px 8px;
     cursor: pointer;
     border-radius: 4px;
     transition: background-color 0.3s ease;
     font-family: 'Proza Libre', sans-serif;
   }
+
+.languageswitch_cont button:hover{
+    background-color: #ffa600;
+}

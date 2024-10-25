@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import logo from '../logo.svg';
+import logo from '../images/logo.svg';
 import './App.css';
 import { Helmet } from 'react-helmet';
 import img1 from '../images/design-image.svg';
@@ -160,3 +160,4 @@ function App() {
 }
 
 export default App;
+

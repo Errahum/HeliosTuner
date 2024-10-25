@@ -43,12 +43,6 @@ PRODUCT_ID = (os.getenv("stripe_product_ID"))  # Remplacez par l'ID de votre pro
 
 # -------------------------Security--------------------------------
 
-app.config.update(
-    SESSION_COOKIE_SECURE=True,
-    SESSION_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SAMESITE='None',
-    SESSION_COOKIE_DOMAIN=".fineurai.com"
-)
 
 frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
@@ -102,15 +96,25 @@ limiter = Limiter(
     default_limits=["200 per day", "50 per hour"]
 )
 
+# Configure CORS
 CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": frontend_url}},
      allow_headers=["Content-Type", "Authorization", "Access-Control-Allow-Origin"])
 
+# Configure session cookies
+app.config.update(
+    SESSION_COOKIE_SECURE=False,
+    SESSION_COOKIE_HTTPONLY=False,
+    SESSION_COOKIE_SAMESITE='None',
+    SESSION_COOKIE_DOMAIN=".fineurai.com"
+)
+
+# Add CORS headers after each request
 @app.after_request
 def add_cors_headers(response):
     response.headers['Access-Control-Allow-Origin'] = frontend_url
     response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
     response.headers['Access-Control-Allow-Headers'] = 'Authorization, Content-Type'
-    response.headers['Access-Control-Allow-Credentials'] = 'true'  # Si tu utilises des cookies de session
+    response.headers['Access-Control-Allow-Credentials'] = 'true'
     return response
 
 

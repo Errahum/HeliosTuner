@@ -3,7 +3,7 @@ import './PaymentPage.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 const url = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
-// url+
+
 function PaymentPage() {
   const [offers, setOffers] = useState([]);
   const { t } = useTranslation();
@@ -21,51 +21,50 @@ function PaymentPage() {
 
     async function checkSession() {
       try {
-          const sessionResponse = await fetch(url + '/api/check-session', {
-              method: 'GET',
-              headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Exemple d'ajout de jeton JWT
-              },
-              credentials: 'include', // Inclure les cookies de session
-          });
-          const sessionData = await sessionResponse.json();
-  
-          // Si la session est valide, vérifier les paramètres d'URL
-          if (sessionData.message === 'Session valid') {
-              const queryParams = new URLSearchParams(location.search);
-              const email = queryParams.get('email');
-              const token = queryParams.get('token');
-  
-              // Si email et token sont présents, rediriger vers /home
-              if (email && token) {
-                  navigate('/home');
-                  return;
-              }
-  
-              // Si pas de token et pas d'email, continuer à charger les offres
-              fetchOffers();
-              fetchPaymentLinks();
-              return;
-          }
-  
-          // Sinon, continuer à vérifier l'email et le token dans les query params
+        const sessionResponse = await fetch(url + '/api/check-session', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include', // Inclure les cookies de session
+        });
+        const sessionData = await sessionResponse.json();
+
+        // Si la session est valide, vérifier les paramètres d'URL
+        if (sessionData.message === 'Session valid') {
           const queryParams = new URLSearchParams(location.search);
           const email = queryParams.get('email');
           const token = queryParams.get('token');
-  
-          if (!email || !token) {
-              navigate('/'); // Rediriger vers la page de connexion si email ou token manquant
-              return;
+
+          // Si email et token sont présents, rediriger vers /home
+          if (email && token) {
+            navigate('/home');
+            return;
           }
-  
-          // Vérifier le token si pas de session valide
-          await verifyTokenAndRedirect(email, token);
+
+          // Si pas de token et pas d'email, continuer à charger les offres
+          fetchOffers();
+          fetchPaymentLinks();
+          return;
+        }
+
+        // Sinon, continuer à vérifier l'email et le token dans les query params
+        const queryParams = new URLSearchParams(location.search);
+        const email = queryParams.get('email');
+        const token = queryParams.get('token');
+
+        if (!email || !token) {
+          navigate('/'); // Rediriger vers la page de connexion si email ou token manquant
+          return;
+        }
+
+        // Vérifier le token si pas de session valide
+        await verifyTokenAndRedirect(email, token);
       } catch (error) {
-          console.error('Error checking session:', error);
-          navigate('/'); // Rediriger vers la page de connexion en cas d'erreur
+        console.error('Error checking session:', error);
+        navigate('/'); // Rediriger vers la page de connexion en cas d'erreur
       }
-  }
+    }
 
     async function verifyTokenAndRedirect(email, token) {
       try {
@@ -73,7 +72,6 @@ function PaymentPage() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`,
           },
           body: JSON.stringify({ email, token }),
           credentials: 'include', // Inclure les cookies de session
@@ -100,11 +98,10 @@ function PaymentPage() {
     }
 
     async function checkPaymentStatus(email) {
-      const response = await fetch(url+`/api/check-payment-status?email=${email}`, {
+      const response = await fetch(url + `/api/check-payment-status?email=${email}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
         },
         credentials: 'include', // Inclure les cookies de session
       });
@@ -113,11 +110,10 @@ function PaymentPage() {
     }
 
     async function fetchOffers() {
-      const response = await fetch(url+'/api/get-offers', {
+      const response = await fetch(url + '/api/get-offers', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
         },
         credentials: 'include', // Inclure les cookies de session
       });
@@ -126,11 +122,10 @@ function PaymentPage() {
     }
 
     async function fetchPaymentLinks() {
-      const response = await fetch(url+'/api/payment-links', {
+      const response = await fetch(url + '/api/payment-links', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
         },
         credentials: 'include', // Inclure les cookies de session
       });
@@ -142,11 +137,10 @@ function PaymentPage() {
   }, [location, navigate]);
 
   const handlePayment = async (priceId) => {
-    const response = await fetch(url+'/api/create-payment-link', {
+    const response = await fetch(url + '/api/create-payment-link', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
       },
       credentials: 'include', // Inclure les cookies de session
       body: JSON.stringify({ price_id: priceId }),

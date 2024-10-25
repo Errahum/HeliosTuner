@@ -1,139 +1,89 @@
-# Création d'un Frontend React avec un Backend Flask
+# Comment partir le projet en locale?
 
-# Testing step:
-1: Start backend app.py
-2: start frontend:
-  - cd frontend
-  - npm start
-3: Start Stripe webhook
-  - stripe listen --forward-to http://localhost:5000/api/webhook
+## Terminal 1
+Exécuter le backend fineurai/backend/app.py
 
-## Étapes pour créer un frontend React
+## Terminal 2
 
-1. **Assurez-vous d'avoir Node.js installé** :
-   - Téléchargez Node.js depuis [nodejs.org](https://nodejs.org/) si ce n'est pas encore fait.
-   - Vérifiez l'installation avec :
-     ```bash
-     node -v
-     npm -v
-     ```
+``
+cd frontend
+``
 
-2. **Créez l'application React** :
-   - Ouvrez un terminal à la racine de votre projet (où se trouve le dossier `"backend"`).
-   - Exécutez la commande suivante pour créer un projet React dans le dossier `"frontend"` :
-     ```bash
-     npx create-react-app frontend
-     ```
+``
+stripe listen --forward-to http://localhost:5000/api/webhook
+``
 
-3. **Démarrer l'application React** :
-   - Accédez au dossier `"frontend"` :
-     ```bash
-     cd frontend
-     ```
-   - Démarrez le serveur de développement React :
-     ```bash
-     npm start
-     ```
-   - L'application React sera disponible à `http://localhost:3000`.
+## Terminal 3
+### Soit exécuter le serveur ou en créer un:
+#### Création:
 
-## Étapes pour configurer la communication entre React et Flask (app.py)
+``
+npm install
+``
 
-1. **Configurer le proxy dans React** :
-   - Ouvrez le fichier `frontend/package.json`.
-   - Ajoutez la ligne suivante pour définir le proxy :
-     ```json
-     "proxy": "http://localhost:5000",
-     ```
+``
+cd frontend
+``
 
-2. **Assurer la communication entre le frontend et le backend** :
-   - Ouvrez le fichier `frontend/src/App.js` et remplacez le contenu par :
-     ```javascript
-     import React, { useState } from 'react';
+``
+npm start
+``
 
-     function App() {
-       const [userMessage, setUserMessage] = useState('');
-       const [chatResponse, setChatResponse] = useState('');
+#### Utilisation du serveur:
+``
+cd frontend
+``
 
-       const handleChatCompletion = async () => {
-         const response = await fetch('/api/chat-completion', {
-           method: 'POST',
-           headers: { 'Content-Type': 'application/json' },
-           body: JSON.stringify({
-             user_message: userMessage,
-             max_tokens: 100,
-             model: 'gpt-3.5-turbo',
-             temperature: 1.0,
-             stop: null,
-             window_size: 10
-           })
-         });
+``
+npm install
+``
 
-         const data = await response.json();
-         if (response.ok) {
-           setChatResponse(data.response.content); // Afficher la réponse de l'IA
-         } else {
-           console.error('Erreur lors de la génération du chat:', data.message);
-         }
-       };
+``
+npm run build
+``
 
-       return (
-         <div>
-           <h1>Chat App</h1>
-           <input
-             type="text"
-             value={userMessage}
-             onChange={(e) => setUserMessage(e.target.value)}
-             placeholder="Tapez votre message"
-           />
-           <button onClick={handleChatCompletion}>Envoyer</button>
-           {chatResponse && <div>Réponse de l'IA: {chatResponse}</div>}
-         </div>
-       );
-     }
+``
+node server.js
+``
 
-     export default App;
-     ```
+# Comment partir le projet en ligne?
 
-## Étapes pour faire fonctionner le backend et le frontend ensemble
+Mettre les variables d'environnements dans le hosting de backend.
 
-1. **Démarrer le backend Flask** :
-   - Allez dans votre dossier `"backend"` :
-     ```bash
-     cd backend
-     ```
-   - Démarrez le serveur Flask :
-     ```bash
-     python app.py
-     ```
-   - Le backend sera disponible à `http://localhost:5000`.
+Frontend prend seulement l'url du backend pour fonctionner.
 
-2. **Démarrer le frontend React** :
-   - Ouvrez un autre terminal et accédez au dossier `"frontend"` :
-     ```bash
-     cd frontend
-     ```
-   - Démarrez l'application React :
-     ```bash
-     npm start
-     ```
-   - L'application React sera accessible à `http://localhost:3000`.
+## Backend:
 
-## Structure finale du projet
+### env var:
+````
+PORT:8000
+FLASK_ENV:production
+PYTHONPATH:./backend:./backend/src
+e.c.t.
+````
 
-Votre projet devrait ressembler à ceci :
+### Build Command:
+``
+$pip install -r requirements.txt
+``
+### Start Command:
+``
+$gunicorn -b 0.0.0.0:$PORT backend.app:app
+``
+## Frontend:
+Foward de Cloudflare jusqu'au Hosting pour l'URL du Frontend
 
-/my-project /backend /app.py # Backend Flask avec les endpoints API /chat_completion_handle.py # Votre module existant /requirements.txt # Les dépendances Python /frontend /public /src /package.json # Projet React
+### env var:
+````
+PORT:10000
+REACT_APP_BACKEND_URL:BACKEND_URL_PUBLIC
+````
 
-
-## Conclusion
-
-- Vous avez créé un projet React dans le dossier `"frontend"`.
-- Vous avez configuré un proxy pour que React puisse envoyer des requêtes à Flask sur `localhost:5000`.
-- Vous avez un exemple de composant React qui envoie des requêtes au backend Flask pour obtenir une réponse de l'API.
-
-
-# Nettoyez le cache de npm : Parfois, des problèmes peuvent être résolus en nettoyant le cache de npm :
-
-```bash
-npm cache clean --force
-```
+### Build Command:
+``
+$cd frontend && npm install && npm run build
+``
+### Start Command:
+``
+$cd frontend && node server.js
+``

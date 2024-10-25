@@ -791,8 +791,10 @@ if __name__ == '__main__':
     app.run(debug=True)
     port = int(os.getenv("PORT", 5000))
     if port == 5000:
+        check_and_update_subscriptions()
         start_scheduler()
         app.run(debug=True)
     else:
+        check_and_update_subscriptions()
         start_scheduler()
         app.run(host='0.0.0.0', port=port, debug=False)

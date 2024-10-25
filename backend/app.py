@@ -25,7 +25,7 @@ from stripe_cancel_sub import cancel_all_subscriptions, get_customer_ids_by_emai
 from supabase_client import get_supabase_client
 from openai_routes import fine_tuning_bp, chat_completion_bp, get_plan_tokens, jsonl_bp
 from src.utils.custom_logging import logging_custom
-from stripe_update_sub import update_subscription_status
+from stripe_update_sub import check_and_update_subscriptions
 
 logging_custom()
 
@@ -687,13 +687,13 @@ def check_payment_status():
 
 # ----------------------------------------------------------------
 
-def check_and_update_subscriptions():
+def check_and_update():
     # Votre logique pour vérifier et mettre à jour les abonnements
-    update_subscription_status()
+    check_and_update_subscriptions()
 
 def start_scheduler():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(func=check_and_update_subscriptions, trigger="interval", minutes=10)
+    scheduler.add_job(func=check_and_update, trigger="interval", minutes=10)
     scheduler.start()
 # ------------------------- webhook --------------------------------
 

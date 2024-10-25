@@ -69,7 +69,7 @@ function PaymentPage() {
 
     async function verifyTokenAndRedirect(email, token) {
       try {
-        const response = await fetch(url+'/api/verify-magic-link', {
+        const response = await fetch(url + '/api/verify-magic-link', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

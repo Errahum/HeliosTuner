@@ -42,6 +42,13 @@ stripe.api_key = str(os.getenv("stripe_key_backend"))
 PRODUCT_ID = (os.getenv("stripe_product_ID"))  # Remplacez par l'ID de votre produit
 
 # -------------------------Security--------------------------------
+
+app.config.update(
+    SESSION_COOKIE_SECURE=True,  # Assurez-vous que les cookies sont sécurisés
+    SESSION_COOKIE_HTTPONLY=True,  # Empêche l'accès aux cookies via JavaScript
+    SESSION_COOKIE_SAMESITE='Lax'  # Empêche l'envoi des cookies avec les requêtes cross-site
+)
+
 frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
 csp = {
@@ -243,7 +250,7 @@ def get_user_info():
 
     if not email:
         logging.error("User not logged in")
-        return jsonify({'error': 'User not logged in'}), 400
+        return jsonify({'error': 'get_user_info User not logged in'}), 400
 
     return jsonify({'email': email, 'user_id': user_id})
 
@@ -360,17 +367,21 @@ def check_session():
     jwt_token = session.get('jwt_token')  # Récupérer le token de session
     
     if not jwt_token:
+        logging.error({"message": "No active session, missing JWT token"})
         return jsonify({"message": "No active session, missing JWT token"}), 401
 
     try:
         decoded_token = jwt.decode(jwt_token, os.getenv("SECRET_KEY"), algorithms=['HS256'])
         # Retourner un email si le jeton est valide
+        logging.error({"message": "Session valid", "email": decoded_token.get('email')})
         return jsonify({"message": "Session valid", "email": decoded_token.get('email')}), 200
     
     except jwt.ExpiredSignatureError:
+        logging.error({"message": "Session expired, token is no longer valid"})
         return jsonify({"message": "Session expired, token is no longer valid"}), 401
     
     except jwt.InvalidTokenError:
+        logging.error({"message": "Invalid session, token is not valid"})
         return jsonify({"message": "Invalid session, token is not valid"}), 401
 
 
@@ -404,6 +415,7 @@ def verify_magic_link():
                 session['jwt_token'] = jwt_token
 
                 session['email'] = email
+                logging.info({"message": "Magic link verified successfully!", "token": jwt_token})
                 return jsonify({"message": "Magic link verified successfully!", "token": jwt_token}), 200
 
             # Convertir les objets datetime en chaînes de caractères
@@ -426,7 +438,7 @@ def verify_magic_link():
             
             # Store JWT token in session or return it in response
             session['jwt_token'] = jwt_token
-            
+            logging.info({"message": "Magic link verified successfully!", "token": jwt_token})
             return jsonify({"message": "Magic link verified successfully!", "token": jwt_token}), 200
         else:
             return jsonify({"message": "Invalid email or token"}), 400

@@ -510,29 +510,26 @@ def get_payment_links():
 def create_payment_link():
     data = request.json
     try:
-        # Log the incoming data
-        logging.info(f"Received data for payment link: {data}")
-
-        # Check if price_id is present
+        # Vérifier si price_id est présent
         if 'price_id' not in data:
             raise ValueError("Missing 'price_id' in request data")
 
-        # Log the price_id
-        logging.info(f"Using price_id: {data['price_id']}")
+        # Chercher le lien de paiement correspondant dans le fichier JSON
+        payment_link_url = None
+        for plan_type in payment_links.values():
+            if data['price_id'] in plan_type:
+                payment_link_url = plan_type[data['price_id']]['plink']
+                break
 
-        # Create a Payment Link using Stripe API
-        payment_link = stripe.PaymentLink.create(
-            line_items=[{'price': data['price_id'], 'quantity': 1}]
-        )
+        if not payment_link_url:
+            raise ValueError("Invalid 'price_id' provided")
 
-        # Log the Payment Link URL
-        logging.info(f"Created payment link: {payment_link.url}")
-
-        return jsonify({'url': payment_link.url}), 200
+        # Retourner l'URL du lien de paiement existant
+        return jsonify({'url': payment_link_url}), 200
     except Exception as e:
-        # Log the error
-        logging.error(f"Error creating payment link: {e}")
+        logging.error(f"Error retrieving payment link: {e}")
         return jsonify({'error': str(e)}), 500
+
     
 
 

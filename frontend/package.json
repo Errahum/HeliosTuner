@@ -35,7 +35,8 @@
     "build": "cross-env NODE_OPTIONS='--max-old-space-size=4096' react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "serve": "serve -s build -l tcp://0.0.0.0:${PORT}"
+    "serve": "serve -s build -l tcp://0.0.0.0:${PORT}",
+    "build:digitalocean": "yarn install --production=false && yarn run build && rm -rf node_modules && yarn install --production --frozen-lockfile"
   },
   "eslintConfig": {
     "extends": [
@@ -58,12 +59,15 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5000",
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-env": "^7.25.8",
     "@babel/preset-react": "^7.25.7",
     "cross-env": "^7.0.3"
+  },
+  "engines": {
+    "node": "16.x",
+    "yarn": "^1.22.19"
   }
 }

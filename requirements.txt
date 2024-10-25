@@ -13,3 +13,4 @@ Requests==2.32.3
 supabase==2.9.1
 flask_cors==3.0.10
 redis==5.1.1
+apscheduler==3.10.4

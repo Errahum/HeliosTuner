@@ -15,6 +15,7 @@ from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_talisman import Talisman
+from apscheduler.schedulers.background import BackgroundScheduler
 
 # Ajoutez le chemin du dossier backend au PYTHONPATH
 import sys
@@ -24,6 +25,7 @@ from stripe_cancel_sub import cancel_all_subscriptions, get_customer_ids_by_emai
 from supabase_client import get_supabase_client
 from openai_routes import fine_tuning_bp, chat_completion_bp, get_plan_tokens, jsonl_bp
 from src.utils.custom_logging import logging_custom
+from stripe_update_sub import update_subscription_status
 
 logging_custom()
 
@@ -685,7 +687,14 @@ def check_payment_status():
 
 # ----------------------------------------------------------------
 
+def check_and_update_subscriptions():
+    # Votre logique pour vérifier et mettre à jour les abonnements
+    update_subscription_status()
 
+def start_scheduler():
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(func=check_and_update_subscriptions, trigger="interval", minutes=10)
+    scheduler.start()
 # ------------------------- webhook --------------------------------
 
 
@@ -782,6 +791,8 @@ if __name__ == '__main__':
     app.run(debug=True)
     port = int(os.getenv("PORT", 5000))
     if port == 5000:
+        start_scheduler()
         app.run(debug=True)
     else:
+        start_scheduler()
         app.run(host='0.0.0.0', port=port, debug=False)

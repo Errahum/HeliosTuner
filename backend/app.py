@@ -211,35 +211,34 @@ smtp_host = os.getenv('SMTP_HOST')
 smtp_port = int(os.getenv('SMTP_PORT'))
 username = os.getenv('SMTP_USERNAME')
 password = os.getenv('SMTP_PASSWORD')
-to_email = os.getenv('SMTP_TO_EMAIL')
+contact_email = smtp_host
+
 
 @app.route('/api/contact-us', methods=['POST'])
 @limiter.limit("1 per minute")
 def contact_us():
-    if 'email' not in session:
+    email = session.get('email')
+    if not email:
         return jsonify({'error': 'Unauthorized'}), 401
 
     data = request.json
     subject = data.get('subject')
-    email = data.get('email')
     message = data.get('message')
 
-    if not subject or not email or not message:
+    if not subject or not message:
         return jsonify({'error': 'All fields are required'}), 400
 
     msg = MIMEText(f"Subject: {subject}\nEmail: {email}\nMessage: {message}")
     msg['Subject'] = 'Contact Us Form Submission'
-    msg['From'] = username
-    msg['To'] = to_email
+    msg['From'] = email
+    msg['To'] = contact_email
 
     try:
         with smtplib.SMTP(smtp_host, smtp_port) as server:
-            server.starttls()  # Upgrade the connection to a secure encrypted SSL/TLS connection
             server.login(username, password)
-            server.sendmail(username, to_email, msg.as_string())
+            server.sendmail(email, contact_email, msg.as_string())
         return jsonify({'message': 'Email sent successfully!'}), 200
     except Exception as e:
-        logging.error(f"Error sending email: {e}")
         return jsonify({'error': str(e)}), 500
     
 # ----------------------------------------------------------------

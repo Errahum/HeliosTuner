@@ -211,14 +211,13 @@ smtp_host = os.getenv('SMTP_HOST')
 smtp_port = int(os.getenv('SMTP_PORT'))
 username = os.getenv('SMTP_USERNAME')
 password = os.getenv('SMTP_PASSWORD')
-contact_email = smtp_host
-
+contact_email = username
 
 @app.route('/api/contact-us', methods=['POST'])
-@limiter.limit("1 per minute")
 def contact_us():
     email = session.get('email')
     if not email:
+        logging.error({'error': 'Unauthorized'})
         return jsonify({'error': 'Unauthorized'}), 401
 
     data = request.json
@@ -230,15 +229,35 @@ def contact_us():
 
     msg = MIMEText(f"Subject: {subject}\nEmail: {email}\nMessage: {message}")
     msg['Subject'] = 'Contact Us Form Submission'
-    msg['From'] = email
+    msg['From'] = username
     msg['To'] = contact_email
 
     try:
         with smtplib.SMTP(smtp_host, smtp_port) as server:
+            server.ehlo()
+            server.starttls()
+            server.ehlo()
             server.login(username, password)
-            server.sendmail(email, contact_email, msg.as_string())
+            server.sendmail(username, contact_email, msg.as_string())
+        logging.info({'message': 'Email sent successfully!'})
         return jsonify({'message': 'Email sent successfully!'}), 200
+    except smtplib.SMTPAuthenticationError:
+        logging.error("SMTP Authentication Error: Authentication not supported by server.")
+        return jsonify({'error': 'SMTP Authentication Error: Authentication not supported by server.'}), 500
+    except smtplib.SMTPRecipientsRefused:
+        logging.error("SMTP Error: Recipient address refused.")
+        return jsonify({'error': 'SMTP Error: Recipient address refused.'}), 500
+    except smtplib.SMTPSenderRefused:
+        logging.error("SMTP Error: Sender address refused.")
+        return jsonify({'error': 'SMTP Error: Sender address refused.'}), 500
+    except smtplib.SMTPException as e:
+        if 'Authentication required' in str(e):
+            logging.error("SMTP Error: Authentication required.")
+            return jsonify({'error': 'SMTP Error: Authentication required.'}), 500
+        logging.error(f"Error sending email: {e}")
+        return jsonify({'error': str(e)}), 500
     except Exception as e:
+        logging.error(f"Error sending email: {e}")
         return jsonify({'error': str(e)}), 500
     
 # ----------------------------------------------------------------

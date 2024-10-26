@@ -97,13 +97,12 @@ security_headers = {
 
 # Apply security headers and CSP only in production
 if os.getenv('FLASK_ENV') == 'production':
-    talisman = Talisman(app, content_security_policy=csp)
-    talisman.strict_transport_security = security_headers['Strict-Transport-Security']
-    talisman.frame_options = security_headers['X-Frame-Options']
-    talisman.content_type_options = security_headers['X-Content-Type-Options']
-    talisman.referrer_policy = security_headers['Referrer-Policy']
-    talisman.permissions_policy = security_headers['Permissions-Policy']
-
+    talisman = Talisman(app, content_security_policy=csp, 
+                        strict_transport_security=security_headers['Strict-Transport-Security'],
+                        frame_options=security_headers['X-Frame-Options'],
+                        content_type_options=security_headers['X-Content-Type-Options'],
+                        referrer_policy=security_headers['Referrer-Policy'],
+                        permissions_policy=security_headers['Permissions-Policy'])
 
 # Initialize Limiter
 limiter = Limiter(
@@ -121,7 +120,7 @@ app.config.update(
     SESSION_COOKIE_SECURE=True,
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE='None',
-    SESSION_COOKIE_DOMAIN = "https://fineurai.com/"
+    SESSION_COOKIE_DOMAIN="fineurai.com"
 )
 
 # Add CORS headers after each request

@@ -311,11 +311,12 @@ def get_tokens():
 
             if total_tokens_used is None or price_id is None or status is None:
                 logging.error(f"Missing data in subscription response for {email}: {subscription.data}")
+                check_and_update_subscriptions_error()
                 return jsonify({'error': 'Incomplete subscription data'}), 500
 
-            if status not in ('succeeded', 'paid'):
+            if status not in ('succeeded', 'paid', 'active'):
                 return jsonify({'tokens': 0, 'max_tokens': 0}), 200
-
+            
             # Trouver le nombre de tokens maximum pour le plan
             max_tokens = None
             for plan_type in payment_links.values():
@@ -710,7 +711,7 @@ def check_payment_status():
         subscription = supabase.table('subscriptions').select('status').eq('email', email).execute()
         if subscription.data:
             status = subscription.data[0].get('status')
-            if status in ('succeeded', 'paid'):
+            if status in ('succeeded', 'paid', 'active'):
                 return jsonify({"hasPaid": True}), 200
         return jsonify({"hasPaid": False}), 200
     except Exception as e:

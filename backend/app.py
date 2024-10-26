@@ -767,15 +767,15 @@ def webhook():
             update_subscription_status(subscription_id, status)
 
             # Vérification avec Stripe si le statut est "draft"
-            if status == 'draft':
-                customer_id = subscription.get('customer')
-                customer = stripe.Customer.retrieve(customer_id)
-                if customer.get('subscriptions').get('data'):
-                    for sub in customer['subscriptions']['data']:
-                        if sub['id'] == subscription_id and sub['status'] == 'active':
-                            status = 'active'
-                            update_subscription_status(subscription_id, status)
-                            break
+            # if status == 'draft':
+            #     customer_id = subscription.get('customer')
+            #     customer = stripe.Customer.retrieve(customer_id)
+            #     if customer.get('subscriptions').get('data'):
+            #         for sub in customer['subscriptions']['data']:
+            #             if sub['id'] == subscription_id and sub['status'] == 'active':
+            #                 status = 'active'
+            #                 update_subscription_status(subscription_id, status)
+            #                 break
 
         if event_type.startswith("invoice.") or event_type.startswith("customer.subscription."):
             invoice = event['data']['object']
@@ -817,14 +817,14 @@ def webhook():
 
 if __name__ == '__main__':
     port = int(os.getenv("PORT", 5000))
-    try:
-        check_and_update_subscriptions_error()
-    except Exception as e:
-        logging.error(f"Error occurred while updating subscriptions: {e}")
-    try:
-        start_scheduler()
-    except Exception as e:
-        logging.error(f"Error occurred while updating subscriptions: {e}")
+    # try:
+    #     check_and_update_subscriptions_error()
+    # except Exception as e:
+    #     logging.error(f"Error occurred while updating subscriptions: {e}")
+    # try:
+    #     start_scheduler()
+    # except Exception as e:
+    #     logging.error(f"Error occurred while updating subscriptions: {e}")
     if port == 5000:
         app.run(debug=True)
     else:

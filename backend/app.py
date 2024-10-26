@@ -97,7 +97,13 @@ security_headers = {
 
 # Apply security headers and CSP only in production
 if os.getenv('FLASK_ENV') == 'production':
-    Talisman(app, content_security_policy=csp, **security_headers)
+    talisman = Talisman(app, content_security_policy=csp)
+    talisman.strict_transport_security = security_headers['Strict-Transport-Security']
+    talisman.frame_options = security_headers['X-Frame-Options']
+    talisman.content_type_options = security_headers['X-Content-Type-Options']
+    talisman.referrer_policy = security_headers['Referrer-Policy']
+    talisman.permissions_policy = security_headers['Permissions-Policy']
+
 
 # Initialize Limiter
 limiter = Limiter(

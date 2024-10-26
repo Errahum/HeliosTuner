@@ -231,6 +231,9 @@ def delete_temp_file():
 @fine_tuning_bp.route('/upload', methods=['POST'])
 def upload_training_file():
     try:
+        if 'file' not in request.files:
+            return jsonify({'error': 'No file part in the request'}), 400
+
         file = request.files['file']
         user_email = session.get('email')
         if not user_email:

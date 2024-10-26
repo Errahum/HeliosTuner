@@ -224,10 +224,8 @@ function FineTuningApp() {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
-
                 },
                 credentials: 'include', // Inclure les cookies de session
-
             });
     
             try {
@@ -235,11 +233,10 @@ function FineTuningApp() {
                     method: 'POST',
                     body: formData,
                     headers: {
-                      'Content-Type': 'application/json',
-                      'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+                        'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
                     },
                     credentials: 'include', // Inclure les cookies de session
-                  });
+                });
                 const data = await response.json();
                 if (response.ok) {
                     setFileUrl(data.file_url);
@@ -265,11 +262,9 @@ function FineTuningApp() {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
-
                     },
                     body: JSON.stringify({ fileName: `temp_${file.name}` }),
                     credentials: 'include', // Inclure les cookies de session
-
                 });
             }
         }

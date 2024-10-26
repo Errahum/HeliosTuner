@@ -100,9 +100,9 @@ if os.getenv('FLASK_ENV') == 'production':
     talisman = Talisman(app, content_security_policy=csp, 
                         strict_transport_security=security_headers['Strict-Transport-Security'],
                         frame_options=security_headers['X-Frame-Options'],
-                        content_type_options=security_headers['X-Content-Type-Options'],
                         referrer_policy=security_headers['Referrer-Policy'],
-                        permissions_policy=security_headers['Permissions-Policy'])
+                        permissions_policy=security_headers['Permissions-Policy'])  # Retire content_type_options
+
 
 # Initialize Limiter
 limiter = Limiter(

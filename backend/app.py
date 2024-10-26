@@ -640,7 +640,7 @@ def update_subscription_in_db(subscription_id, email, customer_id, price_id, sta
         raise
 
 # Liste des statuts acceptés
-valid_statuses = ['succeeded', 'paid', 'pending', 'failed', 'canceled', 'requires_payment_method', 'requires_confirmation', 'requires_action', 'processing', 'requires_capture']
+valid_statuses = ['succeeded', 'active', 'paid', 'pending', 'failed', 'canceled', 'requires_payment_method', 'requires_confirmation', 'requires_action', 'processing', 'requires_capture']
 
 def update_subscription_status(subscription_id, status):
     try:
@@ -763,7 +763,8 @@ def webhook():
             if status not in valid_statuses:
                 logging.error(f"Invalid status '{status}' received from Stripe. Defaulting to 'draft'.")
                 status = 'draft'
-            
+                check_and_update_subscriptions_error()
+                
             update_subscription_status(subscription_id, status)
 
             # Vérification avec Stripe si le statut est "draft"
@@ -814,9 +815,6 @@ def webhook():
         return "Webhook error", 400
     
 
-
-if __name__ == '__main__':
-    port = int(os.getenv("PORT", 5000))
     # try:
     #     check_and_update_subscriptions_error()
     # except Exception as e:
@@ -825,6 +823,15 @@ if __name__ == '__main__':
     #     start_scheduler()
     # except Exception as e:
     #     logging.error(f"Error occurred while updating subscriptions: {e}")
+
+if __name__ == '__main__':
+    port = int(os.getenv("PORT", 5000))
+    backend_enabled = os.getenv("BACKEND_ENABLED", "true").lower() == "true"
+    
+    if not backend_enabled:
+        logging.info("Backend is disabled. Exiting...")
+        sys.exit(0)
+    
     if port == 5000:
         app.run(debug=True)
     else:

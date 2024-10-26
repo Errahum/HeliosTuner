@@ -51,7 +51,7 @@ root.render(
           <Route path="/jsonl-creator" element={<>
             <HeaderDashboard />
             <JsonlCreatorApp />
-            <Footer />
+  
           </>} />
           <Route path="/chat-completion" element={<>
             <HeaderDashboard />

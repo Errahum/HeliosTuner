@@ -817,8 +817,14 @@ def webhook():
 
 if __name__ == '__main__':
     port = int(os.getenv("PORT", 5000))
-    check_and_update_subscriptions_error()
-    start_scheduler()
+    try:
+        check_and_update_subscriptions_error()
+    except Exception as e:
+        logging.error(f"Error occurred while updating subscriptions: {e}")
+    try:
+        start_scheduler()
+    except Exception as e:
+        logging.error(f"Error occurred while updating subscriptions: {e}")
     if port == 5000:
         app.run(debug=True)
     else:

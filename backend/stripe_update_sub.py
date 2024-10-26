@@ -17,23 +17,23 @@ valid_statuses = [
     'requires_action', 'processing', 'requires_capture', 'active'
 ]
 
-def get_supabase_client():
+def get_supabase_client_error():
     supabase_url: str  = os.getenv("SUPABASE_URL")
     supabase_key: str  = os.getenv("SUPABASE_SERVICE_KEY")
     supabase: Client = create_client(supabase_url, supabase_key)
     return supabase
 
-def load_payment_links():
+def load_payment_links_error():
     with open('payment_links.json') as f:
         return json.load(f)
 
-def get_price_id_and_max_tokens(price_id, payment_links):
+def get_price_id_and_max_tokens_error(price_id, payment_links):
     for plan_type in payment_links.values():
         if price_id in plan_type:
             return plan_type[price_id]['id'], plan_type[price_id]['tokens']
     return None, None
 
-def upsert_subscription_in_db(supabase, email, subscription_id, customer_id, status, price_id, max_tokens):
+def upsert_subscription_in_db_error(supabase, email, subscription_id, customer_id, status, price_id, max_tokens):
     if status not in valid_statuses:
         logging.error(f"Invalid status '{status}' received for subscription {subscription_id}. Defaulting to 'draft'.")
         status = 'draft'
@@ -65,8 +65,8 @@ def upsert_subscription_in_db(supabase, email, subscription_id, customer_id, sta
     return response
 
 def check_and_update_subscriptions_error():
-    supabase = get_supabase_client()
-    payment_links = load_payment_links()
+    supabase = get_supabase_client_error()
+    payment_links = load_payment_links_error()
 
     # Récupérer tous les utilisateurs de la base de données Supabase
     response = supabase.table("subscriptions").select("*").execute()
@@ -83,7 +83,7 @@ def check_and_update_subscriptions_error():
         customer_id = subscription['customer']
         status = subscription['status']
         email = stripe.Customer.retrieve(customer_id)['email']
-        price_id, max_tokens = get_price_id_and_max_tokens(subscription['items']['data'][0]['price']['id'], payment_links)
+        price_id, max_tokens = get_price_id_and_max_tokens_error(subscription['items']['data'][0]['price']['id'], payment_links)
 
         # Ensure the status is valid for Supabase
         if status not in valid_statuses:
@@ -93,8 +93,8 @@ def check_and_update_subscriptions_error():
         # Set status to 'paid' for Supabase if it is 'active' in Stripe
         supabase_status = 'paid' if status == 'active' else status
 
-        upsert_subscription_in_db(supabase, email, subscription_id, customer_id, supabase_status, price_id, max_tokens)
+        upsert_subscription_in_db_error(supabase, email, subscription_id, customer_id, supabase_status, price_id, max_tokens)
         logging.info(f"Subscription {subscription_id} for user {email} upserted with status {supabase_status}.")
 
 # if __name__ == "__main__":
-#     check_and_update_subscriptions()
+#     check_and_update_subscriptions_error()

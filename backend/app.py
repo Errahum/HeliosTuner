@@ -121,6 +121,7 @@ app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE='None',
     SESSION_COOKIE_DOMAIN=None
+    # SESSION_COOKIE_DOMAIN="fineurai.com"
 )
 
 # Add CORS headers after each request
@@ -815,13 +816,10 @@ def webhook():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
     port = int(os.getenv("PORT", 5000))
+    check_and_update_subscriptions_error()
+    start_scheduler()
     if port == 5000:
-        check_and_update_subscriptions_error()
-        start_scheduler()
         app.run(debug=True)
     else:
-        check_and_update_subscriptions_error()
-        start_scheduler()
         app.run(host='0.0.0.0', port=port, debug=False)

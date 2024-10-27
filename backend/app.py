@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify, session
 import jwt
 import os
 from dotenv import load_dotenv
+import requests
 import stripe
 import re
 import json
@@ -309,10 +310,13 @@ def get_tokens():
             price_id = subscription_data.get('price_id')
             status = subscription_data.get('status')
 
+            # Appeler /start-scheduler après avoir récupéré les informations d'abonnement
+            requests.post(f"{request.host_url}api/chat-completion/start-scheduler", cookies=request.cookies)
+
             if total_tokens_used is None or price_id is None or status is None:
-                logging.error(f"Missing data in subscription response for {email}: {subscription.data}")
+                logging.error(f"Missing data in subscription response for {email}: {subscription.data} trying to fix with check_and_update_subscriptions_error")
                 check_and_update_subscriptions_error()
-                return jsonify({'error': 'Incomplete subscription data'}), 500
+                return jsonify({'error': 'Incomplete subscription data trying to fix with check_and_update_subscriptions_error'}), 500
 
             if status not in ('succeeded', 'paid', 'active'):
                 return jsonify({'tokens': 0, 'max_tokens': 0}), 200

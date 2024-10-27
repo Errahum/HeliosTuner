@@ -7,6 +7,7 @@ from flask import Blueprint, request, jsonify, session
 import requests
 import supabase
 from datetime import datetime
+from apscheduler.schedulers.background import BackgroundScheduler
 
 from supabase_client import get_supabase_client
 from src.services.fine_tuning.fine_tuning_handle import FineTuningHandle
@@ -21,6 +22,10 @@ logging_custom()
 chat_completion_bp = Blueprint('chat_completion', __name__)
 fine_tuning_bp = Blueprint('fine_tuning', __name__)
 jsonl_bp = Blueprint('jsonl', __name__)
+
+scheduler = BackgroundScheduler()
+scheduler.start()
+
 
 config = Config()  # Assurez-vous de fournir la configuration nécessaire
 chat_completion_handle = ChatCompletionHandle(config)
@@ -524,3 +529,22 @@ def delete_chat_history():
     except Exception as e:
         logging.error(f"Error deleting chat history for {user_email}: {e}")
         return jsonify({"error": "An error occurred while deleting chat history"}), 500
+    
+
+# Exemple d'utilisation dans une route où user_email est disponible
+@chat_completion_bp.route.route('/start-scheduler', methods=['POST'])
+def start_scheduler():
+    user_email = session.get('email')
+    if not user_email:
+        return jsonify({'error': 'User not logged in'}), 400
+
+    schedule_tasks(user_email)
+    return jsonify({'message': 'Scheduler started successfully'}), 200
+
+
+def schedule_tasks(user_email):
+    scheduler.add_job(func=track_tokens, trigger="interval", minutes=10, args=[user_email, 100])
+    scheduler.add_job(func=save_jsonl, trigger="interval", minutes=10)
+    scheduler.add_job(func=upload_training_file, trigger="interval", minutes=10)
+    scheduler.add_job(func=cancel_job, trigger="interval", minutes=10)
+    scheduler.add_job(func=delete_chat_history, trigger="interval", minutes=10, args=[user_email])

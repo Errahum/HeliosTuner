@@ -115,6 +115,11 @@ if os.getenv('FLASK_ENV') == 'production':
                         permissions_policy=security_headers['Permissions-Policy'])
     app.logger.info("Flask-Talisman initialized with CSP")
 
+@app.after_request
+def add_security_headers(response):
+    response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    return response
 
 limiter.init_app(app)
 

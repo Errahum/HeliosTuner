@@ -40,30 +40,6 @@ const addGoogleTag = () => {
 
 addGoogleTag();
 
-// const addCSPHeaders = () => {
-//   const meta = document.createElement('meta');
-//   meta.httpEquiv = 'Content-Security-Policy';
-//   meta.content = `
-//     default-src 'self' https://apis.google.com https://cdnjs.cloudflare.com https://stackpath.bootstrapcdn.com https://fonts.googleapis.com https://fonts.gstatic.com https://www.youtube.com https://www.gstatic.com https://www.google-analytics.com https://api.stripe.com https://*.supabase.co https://fineurai-9hjoe.ondigitalocean.app/api;
-//     script-src 'self' 'unsafe-inline' https://apis.google.com https://cdnjs.cloudflare.com https://stackpath.bootstrapcdn.com https://www.youtube.com https://www.gstatic.com https://www.google-analytics.com https://js.stripe.com https://fineurai-9hjoe.ondigitalocean.app/api;
-//     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://stackpath.bootstrapcdn.com;
-//     img-src 'self' data: https://www.google-analytics.com;
-//     frame-src 'self' https://www.youtube.com https://js.stripe.com;
-//     connect-src 'self' https://api.stripe.com https://*.supabase.co https://fineurai-9hjoe.ondigitalocean.app/api;
-//   `;
-//   document.head.appendChild(meta);
-// };
-
-const addXContentTypeOptions = () => {
-  const meta = document.createElement('meta');
-  meta.httpEquiv = 'X-Content-Type-Options';
-  meta.content = 'nosniff';
-  document.head.appendChild(meta);
-};
-
-// addCSPHeaders();
-addXContentTypeOptions();
-
 const originalFetch = window.fetch;
 window.fetch = function (url, options = {}) {
   options.headers = {

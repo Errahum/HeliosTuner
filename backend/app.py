@@ -60,7 +60,9 @@ csp = {
         'https://fonts.gstatic.com',
         'https://www.youtube.com',
         'https://www.gstatic.com',
-        'https://www.google-analytics.com'
+        'https://www.google-analytics.com',
+        'https://api.stripe.com',  # Stripe API
+        'https://*.supabase.co'  # Supabase
     ],
     'script-src': [
         "'self'",
@@ -70,7 +72,8 @@ csp = {
         'https://stackpath.bootstrapcdn.com',
         'https://www.youtube.com',
         'https://www.gstatic.com',
-        'https://www.google-analytics.com'
+        'https://www.google-analytics.com',
+        'https://js.stripe.com'  # Stripe JS
     ],
     'style-src': [
         "'self'",
@@ -85,7 +88,13 @@ csp = {
     ],
     'frame-src': [
         "'self'",
-        'https://www.youtube.com'
+        'https://www.youtube.com',
+        'https://js.stripe.com'  # Stripe JS
+    ],
+    'connect-src': [
+        "'self'",
+        'https://api.stripe.com',  # Stripe API
+        'https://*.supabase.co'  # Supabase
     ]
 }
 
@@ -103,7 +112,8 @@ if os.getenv('FLASK_ENV') == 'production':
                         strict_transport_security=security_headers['Strict-Transport-Security'],
                         frame_options=security_headers['X-Frame-Options'],
                         referrer_policy=security_headers['Referrer-Policy'],
-                        permissions_policy=security_headers['Permissions-Policy'])  # Retire content_type_options
+                        permissions_policy=security_headers['Permissions-Policy'])
+    app.logger.info("Flask-Talisman initialized with CSP")
 
 
 limiter.init_app(app)
@@ -117,9 +127,11 @@ app.config.update(
     SESSION_COOKIE_SECURE=True,
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE='None',
-    SESSION_COOKIE_DOMAIN=None
+    SESSION_COOKIE_DOMAIN=os.getenv("SESSION_COOKIE_DOMAIN", None)  # Use environment variable or None
+    # SESSION_COOKIE_DOMAIN=None
     # SESSION_COOKIE_DOMAIN="fineurai.com"
 )
+
 
 # Add CORS headers after each request
 @app.after_request
@@ -717,10 +729,6 @@ def check_payment_status():
 
 # ----------------------------------------------------------------
 
-def start_scheduler():
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(func=check_and_update_subscriptions_error, trigger="interval", minutes=10)
-    scheduler.start()
 # ------------------------- webhook --------------------------------
 
 
@@ -811,16 +819,6 @@ def webhook():
     except Exception as e:
         logging.error(f"Webhook error: {e}")
         return "Webhook error", 400
-    
-
-    # try:
-    #     check_and_update_subscriptions_error()
-    # except Exception as e:
-    #     logging.error(f"Error occurred while updating subscriptions: {e}")
-    # try:
-    #     start_scheduler()
-    # except Exception as e:
-    #     logging.error(f"Error occurred while updating subscriptions: {e}")
 
 if __name__ == '__main__':
     port = int(os.getenv("PORT", 5000))

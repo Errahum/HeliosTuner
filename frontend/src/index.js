@@ -21,6 +21,25 @@ import HelmetPageInfo from './pageInfo'; // Importer le composant PageInfo
 import HeaderDashboard2 from './openai_product/header_dashboard2';
 import BackendStatusChecker from './backend-check/BackendStatusChecker';
 
+// Google tag (gtag.js)
+const addGoogleTag = () => {
+  const script1 = document.createElement('script');
+  script1.async = true;
+  script1.src = 'https://www.googletagmanager.com/gtag/js?id=G-5HKVCPG30X';
+  document.head.appendChild(script1);
+
+  const script2 = document.createElement('script');
+  script2.innerHTML = `
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5HKVCPG30X');
+  `;
+  document.head.appendChild(script2);
+};
+
+addGoogleTag();
+
 const originalFetch = window.fetch;
 window.fetch = function (url, options = {}) {
   options.headers = {
@@ -29,7 +48,6 @@ window.fetch = function (url, options = {}) {
   options.credentials = 'include'; // Inclure les credentials
   return originalFetch(url, options);
 };
-
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -51,7 +69,6 @@ root.render(
           <Route path="/jsonl-creator" element={<>
             <HeaderDashboard />
             <JsonlCreatorApp />
-  
           </>} />
           <Route path="/chat-completion" element={<>
             <HeaderDashboard />

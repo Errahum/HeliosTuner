@@ -17,6 +17,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_talisman import Talisman
 from apscheduler.schedulers.background import BackgroundScheduler
+from limiter import limiter  # Importer l'instance de Limiter
 
 # Ajoutez le chemin du dossier backend au PYTHONPATH
 import sys
@@ -105,12 +106,7 @@ if os.getenv('FLASK_ENV') == 'production':
                         permissions_policy=security_headers['Permissions-Policy'])  # Retire content_type_options
 
 
-# Initialize Limiter
-limiter = Limiter(
-    get_remote_address,
-    app=app,
-    default_limits=["400 per day", "100 per hour"]
-)
+limiter.init_app(app)
 
 # Configure CORS
 CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": frontend_url}},

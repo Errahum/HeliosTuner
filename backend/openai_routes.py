@@ -7,6 +7,7 @@ from flask import Blueprint, request, jsonify, session
 import requests
 import supabase
 from datetime import datetime
+from limiter import limiter  # Importer l'instance de Limiter
 
 from supabase_client import get_supabase_client
 from src.services.fine_tuning.fine_tuning_handle import FineTuningHandle
@@ -198,6 +199,7 @@ def start_fine_tuning():
         return jsonify({'error': str(e)}), 500
     
 @fine_tuning_bp.route('/delete-all-temp-files', methods=['POST'])
+@limiter.exempt
 def delete_all_temp_files():
     try:
         temp_dir = config.TEMP_DIR

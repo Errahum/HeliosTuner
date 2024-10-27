@@ -303,15 +303,12 @@ def get_tokens():
 
     try:
         subscription = supabase.table('subscriptions').select('total_tokens_used', 'price_id', 'status').eq('email', email).execute()
-        
+
         if subscription.data:
             subscription_data = subscription.data[0]
             total_tokens_used = subscription_data.get('total_tokens_used')
             price_id = subscription_data.get('price_id')
             status = subscription_data.get('status')
-
-            # Appeler /start-scheduler après avoir récupéré les informations d'abonnement
-            requests.post(f"{request.host_url}api/chat-completion/start-scheduler", cookies=request.cookies)
 
             if total_tokens_used is None or price_id is None or status is None:
                 logging.error(f"Missing data in subscription response for {email}: {subscription.data} trying to fix with check_and_update_subscriptions_error")

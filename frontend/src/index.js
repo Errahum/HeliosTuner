@@ -40,13 +40,6 @@ const addGoogleTag = () => {
 
 addGoogleTag();
 
-const addXFrameOptions = () => {
-  const meta = document.createElement('meta');
-  meta.httpEquiv = 'X-Frame-Options';
-  meta.content = 'SAMEORIGIN';
-  document.head.appendChild(meta);
-};
-
 // const addCSPHeaders = () => {
 //   const meta = document.createElement('meta');
 //   meta.httpEquiv = 'Content-Security-Policy';
@@ -69,7 +62,6 @@ const addXContentTypeOptions = () => {
 };
 
 // addCSPHeaders();
-addXFrameOptions();
 addXContentTypeOptions();
 
 const originalFetch = window.fetch;

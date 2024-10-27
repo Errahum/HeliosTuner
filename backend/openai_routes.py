@@ -8,6 +8,7 @@ import requests
 import supabase
 from datetime import datetime
 from limiter import limiter  # Importer l'instance de Limiter
+import threading
 
 from supabase_client import get_supabase_client
 from src.services.fine_tuning.fine_tuning_handle import FineTuningHandle
@@ -107,6 +108,24 @@ def save_jsonl():
         logging.error(f"Error saving JSONL entry: {e}")
         return jsonify({'error': str(e)}), 500
     
+# Function to check the fine-tuning job status
+def check_fine_tuning_status(fine_tuning_handle, user_email, tokens_used):
+    try:
+        max_attempts = 60  # Maximum number of attempts (e.g., 60 attempts)
+        attempts = 0
+        while not fine_tuning_handle.is_job_complete() and attempts < max_attempts:
+            time.sleep(10)
+            attempts += 1
+
+        # Track tokens used after the job is complete
+        tokens_used += int(fine_tuning_handle.get_total_tokens_used())
+        track_tokens(user_email, tokens_used)
+        logging.info(f"Fine-tuning completed successfully for {user_email}")
+    except Exception as e:
+        logging.error(f"Error checking fine-tuning status: {e}")
+
+
+
 # Fine-tuning routes
 @fine_tuning_bp.route('/start', methods=['POST'])
 def start_fine_tuning():
@@ -180,12 +199,19 @@ def start_fine_tuning():
         # Track tokens used during the process
         tokens_used = int(fine_tuning_handle.get_total_tokens_used())
         tokens_used += 100  # Example tokens used for fine-tuning
+
+
         # Periodically check the status of the fine-tuning job
-        max_attempts = 60  # Maximum number of attempts (e.g., 60 attempts)
-        attempts = 0
-        while not fine_tuning_handle.is_job_complete() and attempts < max_attempts:
-            time.sleep(10)
-            attempts += 1
+        # max_attempts = 60  # Maximum number of attempts (e.g., 60 attempts)
+        # attempts = 0
+        # while not fine_tuning_handle.is_job_complete() and attempts < max_attempts:
+        #     time.sleep(10)
+        #     attempts += 1
+
+        
+        # Start a new thread to check the fine-tuning status
+        status_thread = threading.Thread(target=check_fine_tuning_status, args=(fine_tuning_handle, user_email, tokens_used))
+        status_thread.start()
 
         # Track tokens used after the job is complete
         tokens_used += int(fine_tuning_handle.get_total_tokens_used())

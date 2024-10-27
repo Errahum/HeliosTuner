@@ -40,12 +40,12 @@ const addGoogleTag = () => {
 
 addGoogleTag();
 
-// const addXFrameOptions = () => {
-//   const meta = document.createElement('meta');
-//   meta.httpEquiv = 'X-Frame-Options';
-//   meta.content = 'SAMEORIGIN';
-//   document.head.appendChild(meta);
-// };
+const addXFrameOptions = () => {
+  const meta = document.createElement('meta');
+  meta.httpEquiv = 'X-Frame-Options';
+  meta.content = 'SAMEORIGIN';
+  document.head.appendChild(meta);
+};
 
 // const addCSPHeaders = () => {
 //   const meta = document.createElement('meta');
@@ -61,16 +61,16 @@ addGoogleTag();
 //   document.head.appendChild(meta);
 // };
 
-// const addXContentTypeOptions = () => {
-//   const meta = document.createElement('meta');
-//   meta.httpEquiv = 'X-Content-Type-Options';
-//   meta.content = 'nosniff';
-//   document.head.appendChild(meta);
-// };
+const addXContentTypeOptions = () => {
+  const meta = document.createElement('meta');
+  meta.httpEquiv = 'X-Content-Type-Options';
+  meta.content = 'nosniff';
+  document.head.appendChild(meta);
+};
 
 // addCSPHeaders();
-// addXFrameOptions();
-// addXContentTypeOptions();
+addXFrameOptions();
+addXContentTypeOptions();
 
 const originalFetch = window.fetch;
 window.fetch = function (url, options = {}) {

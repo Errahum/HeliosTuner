@@ -23,7 +23,7 @@ app.use((req, res, next) => {
     `style-src 'self' https://fonts.googleapis.com https://stackpath.bootstrapcdn.com 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='; ` +
     `img-src 'self' data: https://www.google-analytics.com; ` +
     `font-src 'self' https://fonts.gstatic.com; ` +
-    `frame-src 'self' https://www.youtube.com https://js.stripe.com; ` +
+    `frame-src 'self' https://www.youtube.com https://js.stripe.com https://challenges.cloudflare.com; ` +
     `connect-src 'self' https://api.stripe.com https://*.supabase.co https://fineurai-9hjoe.ondigitalocean.app;`
   );
   next();

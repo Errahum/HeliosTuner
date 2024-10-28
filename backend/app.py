@@ -89,7 +89,8 @@ csp = {
     'frame-src': [
         "'self'",
         'https://www.youtube.com',
-        'https://js.stripe.com'  # Stripe JS
+        'https://js.stripe.com',  # Stripe JS
+        'https://challenges.cloudflare.com'  # Cloudflare Turnstile
     ],
     'connect-src': [
         "'self'",

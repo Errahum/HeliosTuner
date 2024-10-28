@@ -105,7 +105,7 @@
       },
     
       "finetuning": {
-        "base_initial_dataset": "Initial base: A dataset of 500 to 1,000 well-diversified examples could enable the model to handle common JSON structures.",
+        "base_initial_dataset": "Initial base: A dataset of 500 to 1,000 well-diversified examples.",
         "variety_of_use_cases": "Variety of use cases: A set of 2,000 to 5,000 examples would be preferable to cover different structures and instructions.",
         "continuous_improvement": "Continuous improvement: By adding examples as new types of requests appear (through continuous learning), you could refine the model.",
         "fine_tuning_interface": "Fine-Tuning Interface",

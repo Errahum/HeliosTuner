@@ -29,7 +29,6 @@ const addGoogleTag = () => {
   document.head.appendChild(script1);
 
   const script2 = document.createElement('script');
-  script2.setAttribute('nonce', document.querySelector('meta[name="csp-nonce"]').getAttribute('content'));
   script2.innerHTML = `
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}

@@ -21,8 +21,19 @@ import HelmetPageInfo from './pageInfo'; // Importer le composant PageInfo
 import HeaderDashboard2 from './openai_product/header_dashboard2';
 import BackendStatusChecker from './backend-check/BackendStatusChecker';
 
+// Function to get nonce from meta tag
+const getNonce = () => {
+  const meta = document.querySelector('meta[name="csp-nonce"]');
+  return meta ? meta.getAttribute('content') : '';
+};
+
 // Google tag (gtag.js)
 const addGoogleTag = () => {
+  const nonce = getNonce();
+  if (!nonce) {
+    console.error('Nonce not found');
+    return;
+  }
   const script1 = document.createElement('script');
   script1.async = true;
   script1.src = 'https://www.googletagmanager.com/gtag/js?id=G-5HKVCPG30X';
@@ -35,6 +46,7 @@ const addGoogleTag = () => {
     gtag('js', new Date());
     gtag('config', 'G-5HKVCPG30X');
   `;
+  script2.setAttribute('nonce', nonce);
   document.head.appendChild(script2);
 };
 

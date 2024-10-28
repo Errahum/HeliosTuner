@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const crypto = require('crypto');
+const fs = require('fs');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -18,7 +19,15 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, 'build')));
 
 app.get('/*', function (req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  const indexPath = path.join(__dirname, 'build', 'index.html');
+  fs.readFile(indexPath, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).send('Error reading index.html');
+    }
+    const nonce = res.locals.nonce;
+    const updatedData = data.replace('<head>', `<head><meta name="csp-nonce" content="${nonce}">`);
+    res.send(updatedData);
+  });
 });
 
 app.listen(port, '0.0.0.0', () => {

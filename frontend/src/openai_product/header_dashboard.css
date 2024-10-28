@@ -1,5 +1,15 @@
 /* header_dashboard.css */
-@import url('https://fonts.googleapis.com/css2?family=Proza+Libre:wght@400;700&display=swap');
+@font-face {
+    font-family: 'Proza Libre';
+    src: url('../font/ProzaLibre-Regular.ttf') format('truetype');
+    font-weight: 400;
+  }
+  
+  @font-face {
+    font-family: 'Proza Libre';
+    src: url('../font/ProzaLibre-Bold.ttf') format('truetype');
+    font-weight: 700;
+  }
 body {
     font-family: Arial, sans-serif;
     margin: 0;

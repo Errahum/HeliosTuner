@@ -1,5 +1,15 @@
 /* Importer la police */
-@import url('https://fonts.googleapis.com/css2?family=Proza+Libre:wght@400;700&display=swap');
+@font-face {
+  font-family: 'Proza Libre';
+  src: url('../font/ProzaLibre-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Proza Libre';
+  src: url('../font/ProzaLibre-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
 
 /* Appliquer la police aux titres et descriptions des cartes */
 .payment-page{

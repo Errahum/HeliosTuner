@@ -108,7 +108,7 @@ function JsonlCreatorApp() {
         <div className="top-left-section">
           <h3>{t('jsonl_creator.tutorials_in_production')}</h3>
           <iframe
-            src="" //https://www.youtube.com/embed/xTelcVaxK6Q
+            src="https://www.youtube.com/embed/" //https://www.youtube.com/embed/xTelcVaxK6Q
             title="YouTube video"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
@@ -118,6 +118,9 @@ function JsonlCreatorApp() {
           <h2>{t('jsonl_creator.important')}</h2>
           <ul>
             <li>• {t('jsonl_creator.need_10_lines')}</li>
+            <li>• {t('finetuning.base_initial_dataset')}</li>
+            <li>• {t('finetuning.variety_of_use_cases')}</li>
+            <li>• {t('finetuning.continuous_improvement')}</li>
             <li>• {t('jsonl_creator.can_put_raw_code')}</li>
           </ul>
         </div>

@@ -277,7 +277,7 @@ function FineTuningApp() {
                 <div className="top-left-section">
                     <h3>{t('finetuning.tutorials_in_production')}</h3>
                     <iframe
-                        src="" //https://www.youtube.com/embed/xTelcVaxK6Q
+                        src="https://www.youtube.com/embed/" //https://www.youtube.com/embed/xTelcVaxK6Q
                         title="YouTube video"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
@@ -293,6 +293,9 @@ function FineTuningApp() {
                         <li>• {t('finetuning.cost_100_tokens')}</li>
                         <li>• {t('finetuning.be_cautious')}</li>
                         <li>• {t('finetuning.hyperparameters_documentation')} <a href="https://github.com/Errahum/HeliosTuner/blob/main/tutorial_fine_tuning_en.md#hyperparameters" target="_blank" rel="noopener noreferrer" className="orange-link">Hyperparameters Documentation</a></li>
+                        <li>• {t('finetuning.base_initial_dataset')}</li>
+                        <li>• {t('finetuning.variety_of_use_cases')}</li>
+                        <li>• {t('finetuning.continuous_improvement')}</li>
                     </ul>
                 </div>
             </div>

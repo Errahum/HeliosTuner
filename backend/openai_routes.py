@@ -111,11 +111,12 @@ def save_jsonl():
 # Function to check the fine-tuning job status
 def check_fine_tuning_status(fine_tuning_handle, user_email, tokens_used):
     try:
-        max_attempts = 60  # Maximum number of attempts (e.g., 60 attempts)
+        max_attempts = 30  # Maximum number of attempts (e.g., 60 attempts)
         attempts = 0
-        while not fine_tuning_handle.is_job_complete() and attempts < max_attempts:
-            time.sleep(10)
+        while not fine_tuning_handle.is_job_complete() and attempts <= max_attempts:
+            time.sleep(30)
             attempts += 1
+            logging.info(f"Checking fine-tuning status for {user_email} - Attempt {attempts}")
 
         # Track tokens used after the job is complete
         tokens_used += int(fine_tuning_handle.get_total_tokens_used())
@@ -181,6 +182,13 @@ def start_fine_tuning():
         if not subscription.data or subscription.data[0]['status'] not in ('succeeded', 'paid'):
             return jsonify({'error': 'Invalid subscription status'}), 403
 
+        # Vérifier que l'utilisateur est bien le créateur du modèle
+        job_id = data.get('job_id')
+        if job_id:
+            job_metadata = supabase.table('fine_tuning_jobs').select('user_email').eq('job_id', job_id).execute()
+            if not job_metadata.data or job_metadata.data[0]['user_email'] != user_email:
+                return jsonify({'error': 'You are not authorized to modify this job'}), 403
+
         # Define the fine-tuning parameters
         fine_tuning_handle.set_parameter(
             training_data_path=training_data_path,
@@ -192,8 +200,10 @@ def start_fine_tuning():
             batch_size=data['batch_size']
         )
 
+
+
         # At this point, all conditions are satisfied, and we can start fine-tuning
-        fine_tuning_handle.create_fine_tuning_job()
+        fine_tuning_handle.create_fine_tuning_job(user_email)
         logging.info("Fine-tuning started successfully")
 
         # Track tokens used during the process
@@ -332,7 +342,8 @@ def moderate_content(content):
         return {'is_safe': False, 'reason': 'Moderation service error'}
 
 
-    
+
+
 @fine_tuning_bp.route('/jobs', methods=['GET'])
 def get_all_jobs():
     try:
@@ -342,11 +353,22 @@ def get_all_jobs():
     except Exception as e:
         logging.error(f"Error fetching job IDs: {e}")
         return jsonify({'error': str(e)}), 500
+    
 
 @fine_tuning_bp.route('/jobs/cancel', methods=['POST'])
 def cancel_job():
     try:
+        user_email = session.get('email')
+        if not user_email:
+            return jsonify({'error': 'No email in session'}), 400
+
         job_id = request.json.get('job_id')
+        
+        # Récupérer les métadonnées du job pour vérifier l'email du créateur
+        job_metadata = supabase.table('fine_tuning_jobs').select('user_email').eq('job_id', job_id).execute()
+        if not job_metadata.data or job_metadata.data[0]['user_email'] != user_email:
+            return jsonify({'error': 'You are not authorized to cancel this job'}), 403
+
         fine_tuning_handle.cancel_fine_tuning_job([job_id])
         logging.info(f"Job {job_id} cancelled successfully")
         return jsonify({'message': 'Job cancelled successfully'}), 200
@@ -534,6 +556,9 @@ def get_latest_response():
 @fine_tuning_bp.route('/jobs/<job_id>/status', methods=['GET'])
 def get_job_status(job_id):
     try:
+        if not job_id or job_id == 'undefined':
+            return jsonify({'error': 'Invalid job ID'}), 400
+
         status = fine_tuning_handle.get_job_status(job_id)
         return jsonify({'status': status})
     except Exception as e:

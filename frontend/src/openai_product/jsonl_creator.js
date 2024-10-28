@@ -52,7 +52,7 @@ function JsonlCreatorApp() {
             }
         };
         fetchUserInfo();
-    }, [navigate]);
+    }, [navigate, url]);
   // Add new entry to JSONL file
   const createJsonlEntry = () => {
     const newEntry = {
@@ -108,7 +108,7 @@ function JsonlCreatorApp() {
         <div className="top-left-section">
           <h3>{t('jsonl_creator.tutorials_in_production')}</h3>
           <iframe
-            src="https://www.youtube.com/embed/" //https://www.youtube.com/embed/xTelcVaxK6Q
+            src="" //https://www.youtube.com/embed/xTelcVaxK6Q
             title="YouTube video"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen

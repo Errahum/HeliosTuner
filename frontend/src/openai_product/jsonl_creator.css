@@ -18,7 +18,7 @@
 .sections-container {
     display: flex;
     flex-grow: 1;
-    
+    background-color: #252525;
 }
 
 .left-section, .right-section {

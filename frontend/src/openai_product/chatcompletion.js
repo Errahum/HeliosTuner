@@ -201,7 +201,7 @@ function ChatCompletionApp() {
                 <div className="top-left-section">
                     <h3>{t('chat_completion.tutorials_in_production')}</h3>
                     <iframe
-                        src="https://www.youtube.com/embed/" //https://www.youtube.com/embed/xTelcVaxK6Q
+                        src="" //
                         title="YouTube video"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen

@@ -118,16 +118,33 @@ function FineTuningApp() {
     };
 
     const checkJobCompletion = async (jobId) => {
-        try {
-            const interval = setInterval(async () => {
+        let attempts = 0;
+        const maxAttempts = 30; // Nombre maximum de tentatives
+        const intervalTime = 30000; // Temps d'attente entre les tentatives (en millisecondes)
+    
+        const interval = setInterval(async () => {
+            if (!jobId || jobId === 'undefined') {
+                setMessage('Job ID is not yet available. Retrying...');
+                attempts += 1;
+    
+                if (attempts >= maxAttempts) {
+                    clearInterval(interval);
+                    setMessage('Error: Job ID is still undefined after multiple attempts.');
+                    setLoading(false);
+                    return;
+                }
+                return; // Continue to the next iteration
+            }
+    
+            try {
                 const response = await fetch(url+`/api/fine-tuning/jobs/${jobId}/status`, {
                     method: 'GET',
                     headers: {
-                      'Content-Type': 'application/json',
-                      'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
                     },
                     credentials: 'include', // Inclure les cookies de session
-                  });
+                });
                 const data = await response.json();
                 if (response.ok) {
                     if (data.status === 'succeeded') {
@@ -143,11 +160,11 @@ function FineTuningApp() {
                     setMessage(`Error checking job status: ${data.error || 'Unknown error'}`);
                     setLoading(false);
                 }
-            }, 5000); // Vérifie toutes les 5 secondes
-        } catch (error) {
-            setMessage(`Error checking job status: ${error.message}`);
-            setLoading(false); // Arrête le chargement en cas d'erreur
-        }
+            } catch (error) {
+                setMessage(`Error checking job status: ${error.message}`);
+                setLoading(false); // Arrête le chargement en cas d'erreur
+            }
+        }, intervalTime); // Vérifie toutes les 5 secondes
     };
     const getAllJobs = async () => {
         try {
@@ -277,7 +294,7 @@ function FineTuningApp() {
                 <div className="top-left-section">
                     <h3>{t('finetuning.tutorials_in_production')}</h3>
                     <iframe
-                        src="https://www.youtube.com/embed/" //https://www.youtube.com/embed/xTelcVaxK6Q
+                        src="" //https://www.youtube.com/embed/xTelcVaxK6Q
                         title="YouTube video"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
@@ -328,7 +345,6 @@ function FineTuningApp() {
                             />
                             <datalist id="model-suggestions">
                                 <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
-                                <option value="gpt-4o">gpt-4o</option>
                             </datalist>
                         </div>
                     </div>
@@ -373,13 +389,13 @@ function FineTuningApp() {
                 </div>
                 <div className="finetuning-bottom-section">
                     <button className="finetuning-button-orange" onClick={getAllJobs}>{t('finetuning.refresh_models')}</button>
-                    {/* <button className="finetuning-button-grey" onClick={cancelJob}>{t('finetuning.cancel_model')}</button> */}
+                    <button className="finetuning-button-grey" onClick={cancelJob}>{t('finetuning.cancel_model')}</button>
                 </div>
                 <div className="finetuning-jobs">
                     <h2>{t('finetuning.job_ids')}</h2>
-                    {/* <p>{t('finetuning.select_job_id_to_cancel')}</p> */}
+                    <p>{t('finetuning.select_job_id_to_cancel')}</p>
                     <select className="finetuning-select" onChange={(e) => setSelectedJobId(e.target.value)}>
-                        {/* <option value="">{t('finetuning.select_job_id_to_cancel')}</option> */}
+                        <option value="">{t('finetuning.select_job_id_to_cancel')}</option>
                         {jobIds.map(id => {
                             let modelName = id.split(':')[4] + ':' + id.split(':')[5];
                             modelName = modelName.replace('- Model', '');

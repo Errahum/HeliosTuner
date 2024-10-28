@@ -9,7 +9,8 @@ from .fine_tuning_exceptions import FineTuningRequestError, InvalidFineTuningMod
 from .fine_tuning_manager import FineTuningManager
 from src.utils.custom_logging import logging_custom
 from datetime import datetime
-
+from supabase_client import get_supabase_client
+supabase = get_supabase_client()  # Get the supabase client
 
 logging_custom()
 
@@ -89,7 +90,7 @@ class FineTuningHandle:
             if os.path.exists(self.training_data_path):
                 os.remove(self.training_data_path)
 
-    def create_fine_tuning_job(self):
+    def create_fine_tuning_job(self, user_email):
         if not self.training_file_id:
             self.upload_training_file()
             if not self.training_file_id:
@@ -111,6 +112,24 @@ class FineTuningHandle:
             )
             logging.info("\nFine-Tuning Response:")
             logging.info(self.fine_tuning_response)
+
+            # Enregistrer les informations du job dans Supabase
+            job_id = self.fine_tuning_response.id
+            if not job_id:
+                logging.error("Job ID is not defined.")
+                return
+
+            hyperparameters = {
+                "n_epochs": self.n_epochs,
+                "learning_rate_multiplier": self.learning_rate,
+                "batch_size": self.batch_size,
+                "seed": self.seed
+            }
+            supabase.table('fine_tuning_jobs').insert({
+                'user_email': user_email,
+                'job_id': job_id,
+                'hyperparameters': hyperparameters
+            }).execute()
 
             # Estimation du coût
             base_cost_per_million_tokens = 0.024  # Exemple de coût pour gpt-3.5-turbo-0125
@@ -146,13 +165,17 @@ class FineTuningHandle:
 
         job_id = self.fine_tuning_response.id
 
+        if not job_id:
+            logging.error("Job ID is not defined.")
+            return False
+
         try:
             response = self.client.fine_tuning.jobs.retrieve(job_id)
             job_status = response.status
             return job_status == 'succeeded'  # Vérifie si le job est terminé avec succès
         except openai.OpenAIError as e:
             logging.error(f"is_job_complete OpenAI error: {e}")
-            return False
+        return False
     
     def get_total_tokens_used(self):
         if not self.fine_tuning_response:
@@ -160,6 +183,10 @@ class FineTuningHandle:
             return 0
 
         job_id = self.fine_tuning_response.id
+
+        if not job_id:
+            logging.error("Job ID is not defined.")
+            return 0
 
         try:
             response = self.client.fine_tuning.jobs.retrieve(job_id)

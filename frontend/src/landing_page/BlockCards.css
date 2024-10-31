@@ -21,7 +21,6 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
-    height: 60vh;
 }
 
 @keyframes moveUp {

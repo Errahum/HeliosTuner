@@ -365,12 +365,10 @@ def send_magic_link():
     data = request.json
     email = data.get('email')
     captcha_token = data.get('captchaToken')
-
-    if not email or not captcha_token:
-        return jsonify({"message": "Email and captcha token are required"}), 400
     
-    # if not email:
-    #     return jsonify({"message": "Email is required"}), 400
+    if frontend_url != "http://localhost:3000":
+        if not email or not captcha_token:
+            return jsonify({"message": "Email and captcha token are required"}), 400
 
     if not is_valid_email(email):
         return jsonify({"message": "Invalid email format"}), 400

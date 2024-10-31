@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
+import { Helmet } from 'react-helmet';
 import './index.css';
 import App from './landing_page/App';
 import PaymentPage from './payment_page/PaymentPage';
@@ -22,6 +23,9 @@ import HeaderDashboard2 from './openai_product/header_dashboard2';
 import BackendStatusChecker from './backend-check/BackendStatusChecker';
 import { addGoogleTag } from './googleTag'; // Importer le fichier googleTag.js
 
+
+
+
 addGoogleTag();
 
 const originalFetch = window.fetch;
@@ -33,13 +37,21 @@ window.fetch = function (url, options = {}) {
   return originalFetch(url, options);
 };
 
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
   <React.StrictMode>
+    <Helmet>
+      <title>{('Simple AI creator | Fineur AI')}</title>
+      <link rel="icon" type="image/png" href="/logo.png" />
+      <HelmetPageInfo />
+    </Helmet>
+    <HelmetPageInfo />
     <Router>
+      <HelmetPageInfo />
       <BackendStatusChecker>
         <LanguageSwitcher /> {/* Ajouter le composant LanguageSwitcher */}
-        <HelmetPageInfo />
         <Routes>
           <Route path="/" element={<>
             <App />
@@ -48,7 +60,7 @@ root.render(
           <Route path="/payment" element={<>
             <HeaderDashboard />
             <PaymentPage />
-            <Footer />
+            {/* <Footer /> */}
           </>} />
           <Route path="/jsonl-creator" element={<>
             <HeaderDashboard />

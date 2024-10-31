@@ -44,7 +44,7 @@ function JsonlCreatorApp() {
                 });
                 const paymentStatusData = await paymentStatusResponse.json();
                 if (!paymentStatusData.hasPaid) {
-                    navigate('/payment');
+                    // navigate('/payment');
                     return;
                 }
             } catch (error) {

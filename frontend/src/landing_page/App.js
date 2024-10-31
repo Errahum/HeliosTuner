@@ -60,10 +60,15 @@ function App() {
   };
 
   const handleSubmit = () => {
-    if (captchaToken) {
-      sendMagicLink(email, captchaToken);
+    // Ignore the condition if url is "http://localhost:5000"
+    if (url === 'http://localhost:5000') {
+      sendMagicLink(email, captchaToken || false);
     } else {
-      alert("Please complete the captcha.");
+      if (captchaToken) {
+        sendMagicLink(email, captchaToken);
+      } else {
+        alert("Please complete the captcha.");
+      }
     }
   };
 
@@ -96,7 +101,7 @@ function App() {
               onFocus={() => setIsEmailFocused(true)}
               placeholder={t('landing.type_email')}
             />
-            {isEmailFocused && (
+            {isEmailFocused && url !== 'http://localhost:5000' && (
               <Turnstile
                 siteKey="0x4AAAAAAAxwLFOtAMwTvtgs"
                 onSuccess={handleCaptchaSuccess}

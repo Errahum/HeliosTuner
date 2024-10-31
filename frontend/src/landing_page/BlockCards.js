@@ -8,6 +8,10 @@ const BlockCards = () => {
 
   const blocks = [
     {
+      title: t('landing.data_utilization'),
+      description: t('landing.data_utilization_description'),
+    },
+    {
       title: t('landing.enhanced_content_creation'),
       description: t('landing.enhanced_content_creation_description'),
     },
@@ -19,10 +23,6 @@ const BlockCards = () => {
       title: t('landing.customized_for_your_needs'),
       description: t('landing.customized_for_your_needs_description'),
     },
-    {
-      title: t('landing.data_utilization'),
-      description: t('landing.data_utilization_description'),
-    }
   ];
 
   return (

@@ -26,14 +26,14 @@
         "integration_not_offered": "Actuellement, nous n'offrons pas l'option d'intégrer des modèles affinés. Cependant, nous prévoyons d'introduire cette fonctionnalité à l'avenir, alors restez à l'écoute pour les mises à jour!",
         "train_custom_models": "L'application peut-elle entraîner des modèles personnalisés en utilisant des ensembles de données locaux ou intégrer des modèles de plateformes comme Huggingface?",
         "openai_api_only": "L'application est spécifiquement conçue pour l'API OpenAI et n'est pas compatible avec d'autres plateformes telles que Huggingface ou des modèles locaux pour le moment. Cependant, des mises à jour futures pourraient inclure la prise en charge de plateformes supplémentaires.",
-        "enhanced_content_creation": "Création de contenu améliorée",
-        "enhanced_content_creation_description": "Donnez aux créateurs de contenu des outils alimentés par l'IA qui simplifient la génération de contenu, permettant la création de matériel personnalisé et contextuellement pertinent avec facilité.",
-        "innovative_educational_tools": "Outils éducatifs innovants",
-        "innovative_educational_tools_description": "Développez des outils éducatifs interactifs et adaptatifs qui offrent des expériences d'apprentissage personnalisées, améliorant les résultats pour les éducateurs et les étudiants.",
-        "customized_for_your_needs": "Personnalisé pour vos besoins",
-        "customized_for_your_needs_description": "Notre processus de fine-tuning vous permet d'adapter les modèles OpenAI pour répondre à vos objectifs commerciaux spécifiques et aux exigences de votre secteur, garantissant des performances et une pertinence optimales.",
-        "data_utilization": "Utilisation des données",
-        "data_utilization_description": "Tirez le meilleur parti de vos données internes pour améliorer les capacités du modèle, en l'adaptant à vos cas d'utilisation spécifiques et en améliorant ses performances globales."
+        "enhanced_content_creation": "Création de contenu optimisée",
+        "enhanced_content_creation_description": "Générez facilement du contenu personnalisé et pertinent avec des outils IA intuitifs.",
+        "innovative_educational_tools": "Outils éducatifs interactifs",
+        "innovative_educational_tools_description": "Créez des expériences d'apprentissage adaptées pour des résultats optimisés.",
+        "customized_for_your_needs": "Adapté à vos besoins",
+        "customized_for_your_needs_description": "Personnalisez les modèles OpenAI pour des performances alignées sur vos objectifs.",
+        "data_utilization": "Valorisation des données",
+        "data_utilization_description": "Utilisez ou créez des données pour des modèles affinés et adaptés à vos besoins."
     },
     "account": {
         "your_email": "Votre Email :",

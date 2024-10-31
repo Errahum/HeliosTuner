@@ -21,6 +21,7 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
+    height: 60vh;
 }
 
 @keyframes moveUp {
@@ -68,6 +69,8 @@
 .card-title {
     color: #FFA500;
     font-weight: bold;
+    margin-bottom: 20px !important; /* Ajoute un espacement de 15px entre le titre et le texte */
+
 }
 
 .card-description {

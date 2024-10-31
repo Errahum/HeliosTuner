@@ -26,14 +26,14 @@
         "integration_not_offered": "Currently, we do not offer the option to integrate fine-tuned models. However, we are planning to introduce this feature in the future, so stay tuned for updates!",
         "train_custom_models": "Can the application train custom models using local datasets or integrate models from platforms like Huggingface?",
         "openai_api_only": "The application is specifically designed for the OpenAI API and is not compatible with other platforms such as Huggingface or local models at the moment. However, future updates may include support for additional platforms.",
-        "enhanced_content_creation": "Enhanced Content Creation",
-        "enhanced_content_creation_description": "Empower content creators with AI-driven tools that streamline content generation, allowing for the creation of personalized and contextually relevant material with ease.",
-        "innovative_educational_tools": "Innovative Educational Tools",
-        "innovative_educational_tools_description": "Develop interactive and adaptive educational tools that offer personalized learning experiences, improving outcomes for educators and students alike.",
-        "customized_for_your_needs": "Customized for Your Needs",
-        "customized_for_your_needs_description": "Our fine-tuning process allows you to tailor OpenAI models to meet your specific business goals and industry requirements, ensuring optimal performance and relevance.",
-        "data_utilization": "Data Utilization",
-        "data_utilization_description": "Make the most of your internal data to boost the model's capabilities, adapting it to your specific use cases and improving its overall performance."
+        "enhanced_content_creation": "Optimized Content Creation",
+        "enhanced_content_creation_description": "Easily generate personalized, relevant content with intuitive AI tools.",
+        "innovative_educational_tools": "Interactive Educational Tools",
+        "innovative_educational_tools_description": "Create tailored learning experiences for optimized results.",
+        "customized_for_your_needs": "Tailored to Your Needs",
+        "customized_for_your_needs_description": "Customize OpenAI models for performance aligned with your goals.",
+        "data_utilization": "Data Empowerment",
+        "data_utilization_description": "Use or create data for fine-tuned models adapted to your needs."
     },
     "account": {
         "your_email": "Your Email:",

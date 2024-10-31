@@ -4,6 +4,8 @@ import './App.css';
 import { Helmet } from 'react-helmet';
 import img1 from '../images/design-image.svg';
 import img2 from '../images/design-imag2.svg';
+import imgFeature from '../images/image_feature_json.PNG'; 
+import imgFeature2 from '../images/image_feature_completion.PNG'; 
 import BlockCards from './BlockCards';
 import { useTranslation } from 'react-i18next';
 import { Turnstile } from '@marsidev/react-turnstile'
@@ -111,26 +113,44 @@ function App() {
           </div>
         </div>
       </header>
-  
+      <br/><br/>
+      <br/><br/>
       {/* Section of left-right blocks with image and animation */}
       <div className="block-section">
         <div className="block">
           <div className="block-content">
-            <h3>{t('landing.ongoing_conversation_support')}</h3>
-            <p>{t('landing.maintain_continuity')}</p>
+            <h3>{t('landing.Info1')}</h3>
+            <p>{t('landing.Info1_details')}</p>
           </div>
           <img src={img1} alt="Ongoing Conversations" className="block-image animate-right" />
         </div>
+
+      {/* image with animation */}
+      <div className="feature-image-container">
+        <img src={imgFeature} alt="Feature" className="feature-image" />
+      </div>
+
+      <br/><br/>
+      <br/><br/>
         <div className="block">
-          <img src={img2} alt="Improved Task Performance" className="block-image animate-left" />
+          <img src={img1} alt="Improved Task Performance" className="block-image animate-left" />
           <div className="block-content">
-            <h3>{t('landing.improved_task_performance')}</h3>
-            <p>{t('landing.enhance_accuracy')}</p>
+            <h3>{t('landing.Info2')}</h3>
+            <p>{t('landing.Info2_details')}</p>
           </div>
         </div>
+
+        {/* image with animation */}
+        <div className="feature-image-container">
+          <img src={imgFeature2} alt="Feature" className="feature-image" />
+        </div>
       </div>
+
+      <br/><br/>
       <br/><br/>
       <BlockCards />
+
+
   
       {/* FAQ Section */}
       <div className="faq-section">

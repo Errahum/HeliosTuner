@@ -219,7 +219,7 @@ body {
     display: none; /* Hidden by default */
     background-color: transparent;
     border: none;
-    color: white;
+    color: #ffb732;
     font-size: 30px;
     cursor: pointer;
 }
@@ -231,7 +231,7 @@ body {
         position: absolute;
         top: 70px; /* Below header */
         right: 20px;
-        background-color: #003366;
+        background-color: #252525;
         padding: 20px;
         border-radius: 10px;
     }
@@ -244,6 +244,5 @@ body {
         display: block; /* Show hamburger on small screens */
         position: absolute;
         right: 20px;
-        top: 20px;
     }
 }

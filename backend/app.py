@@ -153,7 +153,7 @@ def add_cors_headers(response):
 
 
 @app.route('/api/check-backend-status', methods=['GET'])
-@limiter.limit("10 per minute")
+@limiter.exempt
 def check_backend_status():
     response = jsonify({"status": "ok"})
     response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
@@ -178,7 +178,7 @@ except Exception as e:
 import json  # Assurez-vous que le module json est importé
 
 @app.route('/api/get-subscription-info', methods=['GET'])
-@limiter.limit("10 per minute")
+@limiter.limit("20 per minute")
 def get_subscription_info():
     email = session.get('email')
     if not email:
@@ -292,7 +292,7 @@ def contact_us():
 # ----------------------------------------------------------------
 
 @app.route('/api/user-info', methods=['GET'])
-@limiter.limit("10 per minute")
+@limiter.limit("20 per minute")
 def get_user_info():
     try:
         email = session.get('email')
@@ -309,7 +309,7 @@ def get_user_info():
 
 
 @app.route('/api/get-tokens', methods=['GET'])
-@limiter.limit("10 per minute")
+@limiter.exempt
 def get_tokens():
     email = session.get('email')
     if not email:
@@ -419,7 +419,7 @@ def generate_jwt(email):
     return token
 
 @app.route('/api/check-session', methods=['GET'])
-@limiter.limit("10 per minute")
+@limiter.limit("20 per minute")
 def check_session():
     jwt_token = session.get('jwt_token')  # Récupérer le token de session
     
@@ -444,7 +444,7 @@ def check_session():
 
 
 @app.route('/api/verify-magic-link', methods=['POST'])
-@limiter.limit("10 per minute")
+@limiter.limit("20 per minute")
 def verify_magic_link():
     data = request.json
     email = data.get('email')
@@ -518,7 +518,7 @@ def verify_magic_link():
 
 
 @app.route('/api/get-offers', methods=['GET'])
-@limiter.limit("10 per minute")
+@limiter.limit("20 per minute")
 def get_offers():
     try:
         # Récupérer le produit spécifique
@@ -545,16 +545,16 @@ def get_offers():
         logging.error(f"Error: {e}")  # Ajoutez cette ligne pour vérifier les erreurs
         return jsonify({'error': str(e)}), 500
     
-with open('payment_links.json') as f:
+with open('payment_links.json', 'r', encoding='utf-8') as f:
     payment_links = json.load(f)
 
 @app.route('/api/payment-links', methods=['GET'])
-@limiter.limit("10 per minute")
+@limiter.limit("20 per minute")
 def get_payment_links():
     return jsonify(payment_links)
 
 @app.route('/api/create-payment-link', methods=['POST'])
-@limiter.limit("10 per minute")
+@limiter.limit("20 per minute")
 def create_payment_link():
     data = request.json
     try:
@@ -591,7 +591,7 @@ def create_payment_link():
 
 
 @app.route('/api/create-subscription', methods=['POST'])
-@limiter.limit("10 per minute")
+@limiter.limit("20 per minute")
 def create_subscription():
     data = request.json
     email = data.get('email')
@@ -714,7 +714,7 @@ def upsert_subscription(subscription_id, email, customer_id, price_id, status):
     
         
 @app.route('/api/check-payment-status', methods=['GET'])
-@limiter.limit("10 per minute")
+@limiter.limit("20 per minute")
 def check_payment_status():
     email = request.args.get('email')
     if not email:

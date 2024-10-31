@@ -152,7 +152,16 @@ function PaymentPage() {
       console.error('Error retrieving payment link:', data.error);
     }
   };
-
+  const getOfferItemClass = (offerName) => {
+    switch (offerName) {
+      case 'Starter Plan':
+        return 'offer-item starter-plan';
+      case 'Pro Plan':
+        return 'offer-item pro-plan';
+      default:
+        return 'offer-item';
+    }
+  };
   const filteredOffers = offers.filter(offer => paymentLinks[selectedCategory] && paymentLinks[selectedCategory][offer.id]);
 
   return (
@@ -175,12 +184,12 @@ function PaymentPage() {
         {filteredOffers.map((offer) => {
           const offerDetails = paymentLinks[selectedCategory][offer.id];
           return (
-            <li key={offer.id} className="offer-item">
+            <li key={offer.id} className={getOfferItemClass(offerDetails.name)}>
               <h2>{offerDetails.name}</h2>
               <div className="price-type">
                 <span className="price">{offerDetails.currency.toUpperCase()}{offerDetails.price}</span>
                 <span className="comment">{offerDetails.comment}</span>
-
+  
                 <span className="type">
                   {offerDetails.type.split('\\n').map((line, index) => (
                     <React.Fragment key={index}>

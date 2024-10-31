@@ -14,6 +14,8 @@
 /* Appliquer la police aux titres et descriptions des cartes */
 .payment-page{
     font-family: 'Proza Libre', sans-serif;
+    background-color: #252525;
+    height: 150vh;
 }
 
 /* PaymentPage.css */
@@ -50,13 +52,12 @@
   }
   
   .offers-list {
+    height: 100vh;
     list-style-type: none;
     padding: 0;
-    height: 100vh; /* Assurez-vous que le conteneur parent prend toute la hauteur de la fenêtre */
     display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* Pour espacer les éléments si nécessaire */
-    
+    flex-wrap: wrap;
+    justify-content: center; /* Centrer les éléments horizontalement */
   }
   
   .offer-item {
@@ -70,7 +71,21 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start; /* Aligner les éléments en haut */
-    background-color: #01438a;
+    background-color: #01438ad7;
+    color: white;
+  }
+  .starter-plan{
+    border: 2px solid #FFA500;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px;
+    width: 300px;
+    text-align: center;
+    flex-grow: 1; /* Permet à l'élément de prendre toute la hauteur disponible */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Aligner les éléments en haut */
+    background-color: #01438a00;
     color: white;
   }
   

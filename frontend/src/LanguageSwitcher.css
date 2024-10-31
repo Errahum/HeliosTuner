@@ -16,8 +16,13 @@
     border-radius: 4px;
     transition: background-color 0.3s ease;
     font-family: 'Proza Libre', sans-serif;
-  }
+    
+}
 
 .languageswitch_cont button:hover{
     background-color: #ffa600;
+}
+
+.flag {
+    padding: 5px; /* Add padding to the flag images */
 }

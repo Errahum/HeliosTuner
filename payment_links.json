@@ -1,9 +1,21 @@
 {
   "monthly": {
+    "price_1QG395AeHcU4N7RPX7XswC71": {
+      "id": "price_1QG395AeHcU4N7RPX7XswC71",
+      "plink": "https://buy.stripe.com/5kA8zi6G4bpE8rmfZ5",
+      "name": "Starter Plan",
+      "type": "",
+      "description": "",
+      "price": 9,
+      "currency": "$",
+      "details": "+ Training File Creator \\n\\n + Access to the OpenAI fine-tuning platform \\n\\n + Public access to all models \\n\\n + Conversation history \\n\\n + Regular updates \\n\\n + 50 000 tokens",
+      "comment": "per month",
+      "tokens": 50000
+    },
     "price_1QBHWGAeHcU4N7RPYNfLDAnu": {
       "id": "price_1QBHWGAeHcU4N7RPYNfLDAnu",
       "plink": "https://buy.stripe.com/7sI2aU4xWeBQbDycMQ",
-      "name": "Starter Plan",
+      "name": "Pro Plan",
       "type": "",
       "description": "",
       "price": 19,
@@ -14,10 +26,22 @@
     }
   },
   "yearly": {
+    "price_1QG3AzAeHcU4N7RP2Ik83qbP": {
+      "id": "price_1QG3AzAeHcU4N7RP2Ik83qbP",
+      "plink": "https://buy.stripe.com/14kbLud4sgJY8rm6ow",
+      "name": "Starter Plan",
+      "type": "6+ months free \\n billed yearly $49",
+      "description": "",
+      "price": 4,
+      "currency": "$",
+      "details": "+ Training File Creator \\n\\n + Access to the OpenAI fine-tuning platform \\n\\n + Public access to all models \\n\\n + Conversation history \\n\\n + Regular updates \\n\\n + 1 millions tokens",
+      "comment": "per month",
+      "tokens": 1000000
+    },
     "price_1QBHWGAeHcU4N7RPkto3e1Ia": {
       "id": "price_1QBHWGAeHcU4N7RPkto3e1Ia",
       "plink": "https://buy.stripe.com/5kA5n69Sg79o8rm003",
-      "name": "Starter Plan",
+      "name": "Pro Plan",
       "type": "6+ months free \\n billed yearly $98",
       "description": "",
       "price": 8,

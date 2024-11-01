@@ -78,8 +78,8 @@ pip install -r requirements.txt
 
 ## Resources
 
-- [French Tutorial](https://github.com/Errahum/HeliosTuner-OpenAI-fine-tuning/blob/main/tutorial_fine_tuning_fr.md)
-- [English Tutorial](https://github.com/Errahum/HeliosTuner-OpenAI-fine-tuning/blob/main/tutorial_fine_tuning_en.md)
+- [French Tutorial](https://github.com/Errahum/fineurai/blob/main/tutorial_fine_tuning_fr.md)
+- [English Tutorial](https://github.com/Errahum/fineurai/blob/main/tutorial_fine_tuning_en.md)
 
 ## Demo Video
 

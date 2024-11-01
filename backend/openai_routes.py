@@ -203,7 +203,8 @@ def start_fine_tuning():
 
 
         # At this point, all conditions are satisfied, and we can start fine-tuning
-        fine_tuning_handle.create_fine_tuning_job(user_email)
+        is_public = data.get('is_public', True)  # Récupérer la valeur de is_public, par défaut True
+        fine_tuning_handle.create_fine_tuning_job(user_email, is_public)
         logging.info("Fine-tuning started successfully")
 
         # Track tokens used during the process

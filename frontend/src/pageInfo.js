@@ -15,6 +15,11 @@ const HelmetPageInfo = () => {
       <meta property="og:description" content={t('landing.seo_description')} />
       <meta property="og:image" content="/logo.png" />
       <meta property="og:url" content={window.location.href} />
+      <meta property="og:type" content="website" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={t('landing.title')} />
+      <meta name="twitter:description" content={t('landing.seo_description')} />
+      <meta name="twitter:image" content="/logo.png" />
     </Helmet>
   );
 };

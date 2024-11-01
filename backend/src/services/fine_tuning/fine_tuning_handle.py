@@ -90,7 +90,7 @@ class FineTuningHandle:
             if os.path.exists(self.training_data_path):
                 os.remove(self.training_data_path)
 
-    def create_fine_tuning_job(self, user_email):
+    def create_fine_tuning_job(self, user_email, is_public=True):
         if not self.training_file_id:
             self.upload_training_file()
             if not self.training_file_id:
@@ -128,7 +128,8 @@ class FineTuningHandle:
             supabase.table('fine_tuning_jobs').insert({
                 'user_email': user_email,
                 'job_id': job_id,
-                'hyperparameters': hyperparameters
+                'hyperparameters': hyperparameters,
+                'is_public': is_public  # Ajouter le champ is_public
             }).execute()
 
             # Estimation du coût

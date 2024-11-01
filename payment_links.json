@@ -8,7 +8,7 @@
       "description": "",
       "price": 9,
       "currency": "$",
-      "details": "+ Training File Creator \\n\\n + Access to the OpenAI fine-tuning platform \\n\\n + Public access to all models \\n\\n + Conversation history \\n\\n + Regular updates \\n\\n + 50 000 tokens",
+      "details": "+ Training File Creator \\n\\n + Access to the OpenAI fine-tuning platform \\n\\n + Public access to all models \\n\\n + Conversation history \\n\\n + Regular updates \\n\\n + 50 000 tokens (renewed monthly)",
       "comment": "per month",
       "tokens": 50000
     },
@@ -20,7 +20,7 @@
       "description": "",
       "price": 19,
       "currency": "$",
-      "details": "+ Training File Creator \\n\\n + Access to the OpenAI fine-tuning platform \\n\\n + Public access to all models \\n\\n + Conversation history \\n\\n + Regular updates \\n\\n + 400 000 tokens",
+      "details": "+ Training File Creator \\n\\n + Access to the OpenAI fine-tuning platform \\n\\n + Public access to all models \\n\\n + Conversation history \\n\\n + Regular updates \\n\\n + 400 000 tokens (renewed monthly)",
       "comment": "per month",
       "tokens": 400000
     }
@@ -34,7 +34,7 @@
       "description": "",
       "price": 4,
       "currency": "$",
-      "details": "+ Training File Creator \\n\\n + Access to the OpenAI fine-tuning platform \\n\\n + Public access to all models \\n\\n + Conversation history \\n\\n + Regular updates \\n\\n + 1 millions tokens",
+      "details": "+ Training File Creator \\n\\n + Access to the OpenAI fine-tuning platform \\n\\n + Public access to all models \\n\\n + Conversation history \\n\\n + Regular updates \\n\\n + 1 millions tokens (renewed annually)",
       "comment": "per month",
       "tokens": 1000000
     },
@@ -46,7 +46,7 @@
       "description": "",
       "price": 8,
       "currency": "$",
-      "details": "+ Training File Creator \\n\\n + Access to the OpenAI fine-tuning platform \\n\\n + Public access to all models \\n\\n + Conversation history \\n\\n + Regular updates \\n\\n + 5 millions tokens",
+      "details": "+ Training File Creator \\n\\n + Access to the OpenAI fine-tuning platform \\n\\n + Public access to all models \\n\\n + Conversation history \\n\\n + Regular updates \\n\\n + 5 million tokens (renewed annually)",
       "comment": "per month",
       "tokens": 5000000
     }

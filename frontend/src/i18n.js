@@ -10,6 +10,7 @@ i18n
   .init({
     supportedLngs: ['en', 'fr'],
     fallbackLng: 'fr',
+    lng: 'fr', // Set the default language to French
     debug: true,
     interpolation: {
       escapeValue: false, // React already does escaping

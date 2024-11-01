@@ -16,7 +16,7 @@ class ChatCompletionHandle:
     def __init__(self, config):
         self.chat_completion_manager = ChatCompletionManager(config)
         self.supabase = get_supabase_client()
-        self.messages = []
+        self.user_messages = {}  # Pour stocker les messages par utilisateur
 
     def delete_chat_history(self, email):
         """Delete all chat history for the given email from the Supabase table."""
@@ -48,14 +48,17 @@ class ChatCompletionHandle:
 
     def process_chat_completion(self, email, user_message, max_tokens, model, temperature, stop, window_size):
         try:
+            if email not in self.user_messages:
+                self.user_messages[email] = []
+
             chat_message = ChatMessage(role="user", content=user_message)
-            self.messages.append({"role": "user", "content": user_message})
+            self.user_messages[email].append({"role": "user", "content": user_message})
 
             # Ensure window_size is an integer
             window_size = int(window_size)
 
             # Use only the most recent 'window_size' number of messages for context
-            context_messages = self.messages[-(window_size * 2):]
+            context_messages = self.user_messages[email][-(window_size * 2):]
             logging.debug("Messages to send: %s", context_messages)
 
             chat_completion_request = ChatCompletionRequest(
@@ -70,13 +73,13 @@ class ChatCompletionHandle:
             print(chat_completion_response)
 
             # Adding to messages for future requests
-            self.messages.append({"role": "assistant", "content": chat_completion_response})
+            self.user_messages[email].append({"role": "assistant", "content": chat_completion_response})
 
             # Save the result to Supabase
             self.save_result(email, user_message, model, max_tokens, temperature, stop, chat_completion_response)
 
             # Save the latest response to a file
-            with open('latest_chat_completion.txt', 'w', encoding='utf-8') as file:
+            with open(f'latest_chat_completion_{email}.txt', 'w', encoding='utf-8') as file:
                 file.write(chat_completion_response)
 
         except ChatCompletionsRequestError as e:
@@ -87,6 +90,16 @@ class ChatCompletionHandle:
             print(f"Service not found error: {str(e)}")
         except Exception as e:
             print(f"An unexpected error occurred: {str(e)}")
+
+    def get_latest_response(self, email):
+        try:
+            with open(f'latest_chat_completion_{email}.txt', 'r', encoding='utf-8') as file:
+                return file.read()
+        except FileNotFoundError:
+            return "No response found."
+        except Exception as e:
+            logging.error(f"Error fetching latest response: {e}")
+            return "Error fetching latest response."
 
     def save_result(self, email, user_message, model, max_tokens, temperature, stop, response):
         try:

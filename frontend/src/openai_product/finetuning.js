@@ -83,7 +83,6 @@ function FineTuningApp() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
-
                  },
                 body: JSON.stringify({
                     model: suggestedModel,
@@ -96,7 +95,6 @@ function FineTuningApp() {
                     email: email
                 }),
                 credentials: 'include', // Inclure les cookies de session
-
             });
             const data = await response.json();
             if (response.ok) {
@@ -261,7 +259,7 @@ function FineTuningApp() {
                     setMessage(`File uploaded successfully: ${file.name}`);
                     setIsFileUploaded(true); // Met à jour le statut de l'upload
                 } else {
-                    setMessage(data.error);
+                    setMessage(data.error || 'Unknown error occurred'); // Display the error message
                     // Ensure the temporary file is not used if the upload fails
                     await fetch(url+'/api/fine-tuning/delete-temp-file', {
                         method: 'POST',

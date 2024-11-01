@@ -133,7 +133,7 @@ def start_fine_tuning():
     try:
         user_email = session.get('email')
         if not user_email:
-            return jsonify({'error': 'No email in session'}), 400
+            return jsonify({'error': 'User not authenticated'}), 401
 
         data = request.json
         
@@ -149,7 +149,7 @@ def start_fine_tuning():
 
         # Vérifier si le modèle est bloqué
         if data['model'] in blocked_models:
-            return jsonify({"error": "The selected model is not allowed."}), 403
+            return jsonify({'error': 'Model is blocked'}), 400
         
         # Validate input data for fine-tuning parameters
         required_fields = ['model', 'name', 'seed', 'n_epochs', 'learning_rate', 'batch_size']
@@ -158,16 +158,13 @@ def start_fine_tuning():
                 return jsonify({'error': f'Missing required field: {field}'}), 400
 
         # Retrieve the training data path from the session
-        # Retrieve the training data path from the session
         training_data_path = session.get('training_data_path')
         if not training_data_path:
-            return jsonify({'error': 'Training data path not found in session'}), 400
+            return jsonify({'error': 'Training data path not found'}), 400
 
         # Ensure the training data path is a temporary file
         if not training_data_path.startswith(config.TEMP_DIR):
             return jsonify({'error': 'Invalid training data path'}), 400
-
-
 
         # Set the required token threshold
         tokens_needed = 1000  # Example threshold for fine-tuning
@@ -180,17 +177,18 @@ def start_fine_tuning():
         # Check if the user has a valid subscription
         subscription = supabase.table('subscriptions').select('status').eq('email', user_email).execute()
         if not subscription.data or subscription.data[0]['status'] not in ('succeeded', 'paid'):
-            return jsonify({'error': 'Invalid subscription status'}), 403
+            return jsonify({'error': 'Invalid subscription'}), 403
 
         # Vérifier que l'utilisateur est bien le créateur du modèle
         job_id = data.get('job_id')
         if job_id:
             job_metadata = supabase.table('fine_tuning_jobs').select('user_email').eq('job_id', job_id).execute()
             if not job_metadata.data or job_metadata.data[0]['user_email'] != user_email:
-                return jsonify({'error': 'You are not authorized to modify this job'}), 403
+                return jsonify({'error': 'Unauthorized'}), 403
 
         # Define the fine-tuning parameters
-        fine_tuning_handle.set_parameter(
+        fine_tuning_handle.create_fine_tuning_job(
+            user_email=user_email,
             training_data_path=training_data_path,
             model=data['model'],
             name=data['name'],
@@ -200,33 +198,15 @@ def start_fine_tuning():
             batch_size=data['batch_size']
         )
 
-
-
-        # At this point, all conditions are satisfied, and we can start fine-tuning
-        is_public = data.get('is_public', True)  # Récupérer la valeur de is_public, par défaut True
-        fine_tuning_handle.create_fine_tuning_job(user_email, is_public)
         logging.info("Fine-tuning started successfully")
 
         # Track tokens used during the process
-        tokens_used = int(fine_tuning_handle.get_total_tokens_used())
+        tokens_used = int(fine_tuning_handle.get_total_tokens_used(user_email))
         tokens_used += 100  # Example tokens used for fine-tuning
 
-
-        # Periodically check the status of the fine-tuning job
-        # max_attempts = 60  # Maximum number of attempts (e.g., 60 attempts)
-        # attempts = 0
-        # while not fine_tuning_handle.is_job_complete() and attempts < max_attempts:
-        #     time.sleep(10)
-        #     attempts += 1
-
-        
         # Start a new thread to check the fine-tuning status
         status_thread = threading.Thread(target=check_fine_tuning_status, args=(fine_tuning_handle, user_email, tokens_used))
         status_thread.start()
-
-        # Track tokens used after the job is complete
-        tokens_used += int(fine_tuning_handle.get_total_tokens_used())
-        track_tokens(user_email, tokens_used)
 
         logging.info(f"Fine-tuning completed successfully for {user_email}")
         return jsonify({'message': 'Fine-tuning started successfully'}), 200
@@ -474,7 +454,7 @@ def create_chat_completion():
         data = request.json
         email = session.get('email')  # Récupérer l'email de la session
         if not email:
-            return jsonify({"error": "Email not found in session"}), 400
+            return jsonify({'error': 'User not authenticated'}), 401
 
         user_message = data.get('user_message')
         max_tokens = data.get('max_tokens')
@@ -495,7 +475,7 @@ def create_chat_completion():
 
         # Vérifier si le modèle est bloqué
         if model in blocked_models:
-            return jsonify({"error": "The selected model is not allowed."}), 403
+            return jsonify({'error': 'Model is blocked'}), 400
 
         # Définir le seuil de tokens requis
         tokens_needed = max_tokens  # Seuil pour la création de chat completion
@@ -508,12 +488,12 @@ def create_chat_completion():
         # Vérifier si l'utilisateur a un abonnement valide
         subscription = supabase.table('subscriptions').select('status').eq('email', email).execute()
         if not subscription.data or subscription.data[0]['status'] not in ('succeeded', 'paid'):
-            return jsonify({'error': 'User does not have an active subscription'}), 403
+            return jsonify({'error': 'Invalid subscription'}), 403
 
         # Appel à la fonction de modération
         moderation_result = moderate_content_completion(user_message)
         if not moderation_result['is_safe']:
-            return jsonify({"error": "Message contains inappropriate content", "reason": moderation_result['reason']}), 400
+            return jsonify({'error': 'Content not safe for chat completion'}), 400
 
         print("Message is safe for chat completion")
         chat_completion_handle.create_chat_completion(email, user_message, max_tokens, model, temperature, stop, window_size)
@@ -521,10 +501,10 @@ def create_chat_completion():
         # Suivre les tokens utilisés après la création du chat completion
         track_tokens(email, tokens_needed)
 
-        return jsonify({"message": "Chat completion created successfully"}), 200
+        return jsonify({'message': 'Chat completion created successfully'}), 200
     except Exception as e:
         logging.error(f"Error creating chat completion: {e}")
-        return jsonify({"error": str(e)}), 500
+        return jsonify({'error': str(e)}), 500
     
 
 @chat_completion_bp.route('/view', methods=['GET'])
@@ -544,15 +524,15 @@ def view_saved_results():
 @chat_completion_bp.route('/response', methods=['GET'])
 def get_latest_response():
     try:
-        # Assuming the latest response is stored in a file or a database
-        with open('latest_chat_completion.txt', 'r', encoding='utf-8') as file:
-            latest_response = file.read()
-        return jsonify({"response": latest_response}), 200
-    except FileNotFoundError:
-        return jsonify({"error": "latest_chat_completion.txt not found. Verify your API key or URL."}), 404
+        email = session.get('email')  # Récupérer l'email de la session
+        if not email:
+            return jsonify({'error': 'User not authenticated'}), 401
+
+        response = chat_completion_handle.get_latest_response(email)
+        return jsonify({'response': response}), 200
     except Exception as e:
         logging.error(f"Error fetching latest response: {e}")
-        return jsonify({"error": str(e)}), 500
+        return jsonify({'error': str(e)}), 500
     
 @fine_tuning_bp.route('/jobs/<job_id>/status', methods=['GET'])
 def get_job_status(job_id):
@@ -578,3 +558,32 @@ def delete_chat_history():
     except Exception as e:
         logging.error(f"Error deleting chat history for {user_email}: {e}")
         return jsonify({"error": "An error occurred while deleting chat history"}), 500
+    
+
+@fine_tuning_bp.route('/public-models', methods=['GET'])
+def get_public_models():
+    try:
+        response = supabase.table('fine_tuning_jobs').select('*').eq('is_public', True).execute()
+        if response.data:
+            models = [{'id': job['job_id'], 'name': job['hyperparameters']['name'], 'image': 'default-image.png'} for job in response.data]
+            return jsonify({'models': models}), 200
+        return jsonify({'models': []}), 200
+    except Exception as e:
+        logging.error(f"Error fetching public models: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@fine_tuning_bp.route('/user-models', methods=['GET'])
+def get_user_models():
+    try:
+        user_email = session.get('email')
+        if not user_email:
+            return jsonify({'error': 'No email in session'}), 400
+
+        response = supabase.table('fine_tuning_jobs').select('*').eq('user_email', user_email).execute()
+        if response.data:
+            models = [{'id': job['job_id'], 'name': job['hyperparameters']['name'], 'image': 'default-image.png'} for job in response.data]
+            return jsonify({'models': models}), 200
+        return jsonify({'models': []}), 200
+    except Exception as e:
+        logging.error(f"Error fetching user models: {e}")
+        return jsonify({'error': str(e)}), 500

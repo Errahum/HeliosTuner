@@ -29,6 +29,9 @@ class FineTuningHandle:
         self.local_job_ids = self.load_job_ids(job_ids_file)
         self.job_ids_file = job_ids_file
         self.fine_tuning_response = None  # Pour stocker la réponse du job de fine-tuning
+        self.training_file_ids = {}
+        self.fine_tuning_responses = {}  # Pour stocker les réponses des jobs de fine-tuning par utilisateur
+
 
 
 
@@ -76,65 +79,64 @@ class FineTuningHandle:
             logging.error(f"get_all_job_ids OpenAI error: {e}")
             return None
 
-    def upload_training_file(self):
+    def upload_training_file(self, user_email, training_data_path):
         try:
-            with open(self.training_data_path, 'rb') as f:
+            with open(training_data_path, 'rb') as f:
                 response = self.client.files.create(
                     file=f,
                     purpose="fine-tune",
                 )
-                self.training_file_id = response.id
-            os.remove(self.training_data_path)  # Delete the temporary file after upload
+                self.training_file_ids[user_email] = response.id
+            os.remove(training_data_path)  # Delete the temporary file after upload
         except openai.OpenAIError as e:
             logging.error(f"upload_training_file OpenAI error: {e}")
-            if os.path.exists(self.training_data_path):
-                os.remove(self.training_data_path)
+            if os.path.exists(training_data_path):
+                os.remove(training_data_path)
 
-    def create_fine_tuning_job(self, user_email, is_public=True):
-        if not self.training_file_id:
-            self.upload_training_file()
-            if not self.training_file_id:
+    def create_fine_tuning_job(self, user_email, training_data_path, model, name, seed, n_epochs, learning_rate, batch_size):
+        if user_email not in self.training_file_ids:
+            self.upload_training_file(user_email, training_data_path)
+            if not self.training_file_ids[user_email]:
                 logging.error("create_fine_tuning_job Failed to upload training file.")
                 return
 
         try:
             # Lancer le job de fine-tuning et stocker la réponse
-            self.fine_tuning_response = self.client.fine_tuning.jobs.create(
-                model=self.model,
-                training_file=self.training_file_id,
-                suffix=self.name,
-                seed=self.seed,
+            self.fine_tuning_responses[user_email] = self.client.fine_tuning.jobs.create(
+                model=model,
+                training_file=self.training_file_ids[user_email],
+                suffix=name,
+                seed=seed,
                 hyperparameters={
-                    "n_epochs": self.n_epochs,
-                    "learning_rate_multiplier": self.learning_rate,
-                    "batch_size": self.batch_size
+                    "n_epochs": n_epochs,
+                    "learning_rate_multiplier": learning_rate,
+                    "batch_size": batch_size
                 }
             )
             logging.info("\nFine-Tuning Response:")
-            logging.info(self.fine_tuning_response)
+            logging.info(self.fine_tuning_responses[user_email])
 
             # Enregistrer les informations du job dans Supabase
-            job_id = self.fine_tuning_response.id
+            job_id = self.fine_tuning_responses[user_email].id
             if not job_id:
                 logging.error("Job ID is not defined.")
                 return
 
             hyperparameters = {
-                "n_epochs": self.n_epochs,
-                "learning_rate_multiplier": self.learning_rate,
-                "batch_size": self.batch_size,
-                "seed": self.seed
+                "n_epochs": n_epochs,
+                "learning_rate_multiplier": learning_rate,
+                "batch_size": batch_size,
+                "seed": seed
             }
             supabase.table('fine_tuning_jobs').insert({
                 'user_email': user_email,
                 'job_id': job_id,
-                'hyperparameters': hyperparameters,
-                'is_public': is_public  # Ajouter le champ is_public
+                'hyperparameters': hyperparameters
             }).execute()
 
             # Estimation du coût
             base_cost_per_million_tokens = 0.024  # Exemple de coût pour gpt-3.5-turbo-0125
-            estimated_cost = self.estimate_cost(base_cost_per_million_tokens)
+            estimated_cost = self.estimate_cost(user_email, base_cost_per_million_tokens)
             logging.info(f"Estimated cost for fine-tuning job: ${estimated_cost:.2f} USD")
 
         except openai.OpenAIError as e:
@@ -159,12 +161,12 @@ class FineTuningHandle:
         except Exception as e:
             logging.error(f"An unexpected error occurred: {str(e)}")
 
-    def is_job_complete(self):
-        if not self.fine_tuning_response:
-            logging.error("Fine-tuning response is not initialized.")
+    def is_job_complete(self, user_email):
+        if user_email not in self.fine_tuning_responses:
+            logging.error("Fine-tuning response is not initialized for this user.")
             return False
 
-        job_id = self.fine_tuning_response.id
+        job_id = self.fine_tuning_responses[user_email].id
 
         if not job_id:
             logging.error("Job ID is not defined.")
@@ -178,12 +180,12 @@ class FineTuningHandle:
             logging.error(f"is_job_complete OpenAI error: {e}")
         return False
     
-    def get_total_tokens_used(self):
-        if not self.fine_tuning_response:
-            logging.error("Fine-tuning response is not initialized.")
+    def get_total_tokens_used(self, user_email):
+        if user_email not in self.fine_tuning_responses:
+            logging.error("Fine-tuning response is not initialized for this user.")
             return 0
 
-        job_id = self.fine_tuning_response.id
+        job_id = self.fine_tuning_responses[user_email].id
 
         if not job_id:
             logging.error("Job ID is not defined.")
@@ -217,8 +219,8 @@ class FineTuningHandle:
             logging.error(f"Unexpected error in get_total_tokens_used: {e}")
             return 0
         
-    def estimate_cost(self, base_cost_per_million_tokens):
-        total_tokens = self.get_total_tokens_used()
+    def estimate_cost(self, user_email, base_cost_per_million_tokens):
+        total_tokens = self.get_total_tokens_used(user_email)
         if total_tokens == 0:
             logging.info("Total tokens used is zero, cannot estimate cost.")
             return 0.0

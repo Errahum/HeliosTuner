@@ -68,19 +68,18 @@ function ChatCompletionApp() {
     }, [navigate, url]);
 
     const sendChatRequest = async () => {
-    if (blockedModels.includes(model)) {
-        setResponse('Error: The selected model is not allowed.');
-        return;
-    }
+        if (blockedModels.includes(model)) {
+            setResponse('Error: The selected model is not allowed.');
+            return;
+        }
         try {
             setIsLoading(true);
             const stopList = stop ? stop.split(',').map(s => s.trim()) : null;
-
+    
             const response = await fetch(url+'/api/chat-completion/create', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
-
                  },
                 body: JSON.stringify({
                     user_message: userMessage,
@@ -89,18 +88,17 @@ function ChatCompletionApp() {
                     temperature: temperature,
                     stop: stopList,
                     window_size: windowSize
-                }, ),
+                }),
                 credentials: 'include',
             });
-
-
+    
             const data = await response.json();
             if (response.ok) {
                 setMessage(data.message);
                 await getLatestResponse(); // Fetch the latest response after sending the chat request
                 setIsLoading(false);
             } else {
-                setResponse(data.error); // Display the error message in the response field
+                setResponse(data.error || 'Unknown error occurred'); // Display the error message in the response field
                 setIsLoading(false);
             }
         } catch (error) {
@@ -136,7 +134,6 @@ function ChatCompletionApp() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
-
                  },
                 body: JSON.stringify({ job_info: selectedJobId }),
                 credentials: 'include', // Inclure les cookies de session
@@ -147,7 +144,7 @@ function ChatCompletionApp() {
                 setModel(data.model_name); // Met à jour le champ d'entrée Model
                 setMessage(data.message);
             } else {
-                setMessage(data.error);
+                setMessage(data.error || 'Unknown error occurred'); // Display the error message
             }
         } catch (error) {
             setMessage('Error copying Model Name');

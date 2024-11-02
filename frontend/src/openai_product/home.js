@@ -4,36 +4,39 @@ import './home.css';
 import img1 from '../images/design-imag2.svg';
 import Footer from '../Footer';
 import { useTranslation } from 'react-i18next';
-const url = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
-// url+
+import ModelSelectionPopup from './ModelSelectionPopup'; // Importez le composant ModelSelectionPopup
 
+const url = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
 
 const Home = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const [selectedModel, setSelectedModel] = useState(null);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-   
-            const response = await fetch(url+'/api/user-info', {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
-              },
-              credentials: 'include', // Inclure les cookies de session
-            });
-            if (!response.ok) {
-                navigate('/payment');
-                return;
-            }
+      const response = await fetch(url + '/api/user-info', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, // Utilisation correcte du JWT token
+        },
+        credentials: 'include', // Inclure les cookies de session
+      });
+      if (!response.ok) {
+        navigate('/payment');
+        return;
+      }
     };
     fetchUserInfo();
   }, [navigate]);
 
-
   const handleCreateModel = () => {
     navigate('/jsonl-creator');
+  };
+
+  const handleSelectModel = (modelName) => {
+    setSelectedModel(modelName);
   };
 
   return (
@@ -57,14 +60,9 @@ const Home = () => {
         </div>
         
         <div className="right-panel">
-          <h2>{t('home.your_models_coming_soon')}</h2>
-          <p>{t('home.feature_description')}</p>
-          <div className="model-grid">
-            <div className="model-card disabled">
-              <img src={img1} alt="JSONL-Creator" />
-              <p>JSONL-Creator</p>
-            </div>
-          </div>
+          <ModelSelectionPopup 
+            onSelectModel={handleSelectModel} 
+          />
         </div>
       </div>
       <div className="spacer"></div>

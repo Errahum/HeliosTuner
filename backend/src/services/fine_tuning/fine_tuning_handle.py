@@ -93,7 +93,7 @@ class FineTuningHandle:
             if os.path.exists(training_data_path):
                 os.remove(training_data_path)
 
-    def create_fine_tuning_job(self, user_email, training_data_path, model, name, seed, n_epochs, learning_rate, batch_size):
+    def create_fine_tuning_job(self, user_email, training_data_path, model, name, seed, n_epochs, learning_rate, batch_size, description):
         if user_email not in self.training_file_ids:
             self.upload_training_file(user_email, training_data_path)
             if not self.training_file_ids[user_email]:
@@ -126,12 +126,15 @@ class FineTuningHandle:
                 "n_epochs": n_epochs,
                 "learning_rate_multiplier": learning_rate,
                 "batch_size": batch_size,
-                "seed": seed
+                "seed": seed,
+                "name": name  # Ajouter le nom du modèle dans les hyperparamètres
             }
             supabase.table('fine_tuning_jobs').insert({
                 'user_email': user_email,
                 'job_id': job_id,
-                'hyperparameters': hyperparameters
+                'hyperparameters': hyperparameters,
+                'is_public': True,  # Ajouter le champ is_public avec la valeur par défaut
+                'description': description  # Ajouter la description
             }).execute()
 
             # Estimation du coût

@@ -3,6 +3,7 @@ import './chatcompletion.css';
 import { useNavigate } from 'react-router-dom';
 import './top-right-section.css';
 import { useTranslation } from 'react-i18next';
+import ModelSelectionPopup from './ModelSelectionPopup'; // Importez le composant ModelSelectionPopup
 
 function ChatCompletionApp() {
     const { t } = useTranslation();
@@ -19,6 +20,7 @@ function ChatCompletionApp() {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [deleteMessage, setDeleteMessage] = useState(''); // Ajoutez cet état
+    const [selectedModel, setSelectedModel] = useState(null);
     const blockedModels = [
         'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-4-turbo-preview', 'gpt-4-vision-preview', 
         'gpt-4-turbo-2024-04-09', 'gpt-4-0314', 'gpt-4-32k-0314', 'gpt-4-32k-0613', 
@@ -191,6 +193,12 @@ function ChatCompletionApp() {
             setDeleteMessage('Error deleting chat history');
         }
     };
+
+    const handleSelectModel = (modelName) => {
+        setSelectedModel(modelName);
+      };
+
+
     return (
         <div className="chatcomp-all">
             {/* Top Sections - Video and Explanations */}
@@ -214,7 +222,7 @@ function ChatCompletionApp() {
                 </div>
             </div>
             <div className="chatcomp-top">
-                <div className="chatcomp-bottom-section">
+                {/* <div className="chatcomp-bottom-section">
                     <button className="finetuning-button-orange" onClick={getAllJobs}>{t('chat_completion.refresh_models')}</button>
                     <button className="finetuning-button-blue" onClick={copyModelName}>{t('chat_completion.insert_model_name')}</button>
                 </div>
@@ -230,7 +238,10 @@ function ChatCompletionApp() {
                             );
                         })}
                     </select>
-                </div>
+                </div> */}
+                <ModelSelectionPopup 
+                onSelectModel={handleSelectModel} 
+                />
             </div>
 
             {/* Body Section with Left and Right Sides */}

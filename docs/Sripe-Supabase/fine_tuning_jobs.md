@@ -5,4 +5,5 @@ create table fine_tuning_jobs (
     created_at timestamp with time zone default timezone('utc'::text, now()) not null,
     hyperparameters jsonb not null
     ADD COLUMN is_public boolean DEFAULT true;
+    ADD COLUMN description text;
 );

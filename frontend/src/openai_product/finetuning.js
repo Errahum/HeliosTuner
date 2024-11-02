@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './finetuning.css';
 import './top-right-section.css';
 import { useTranslation } from 'react-i18next';
+import ModelSelectionPopup from './ModelSelectionPopup'; // Importez le composant ModelSelectionPopup
 
 function FineTuningApp() {
     const { t } = useTranslation();
@@ -24,6 +25,7 @@ function FineTuningApp() {
     const [successMessage, setSuccessMessage] = useState(''); // Nouvel état pour le message de succès
     const [isFileUploaded, setIsFileUploaded] = useState(false); // Nouvel état pour le statut de l'upload
     const navigate = useNavigate();
+    const [description, setDescription] = useState('');
     const blockedModels = [
         'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-4-turbo-preview', 'gpt-4-vision-preview', 
         'gpt-4-turbo-2024-04-09', 'gpt-4-0314', 'gpt-4-32k-0314', 'gpt-4-32k-0613', 
@@ -73,6 +75,19 @@ function FineTuningApp() {
 
 
     const startFineTuning = async () => {
+        const fields = {
+            'Fine Tuning Model Name': fineTuningModelName !== 'custom-model' && fineTuningModelName,
+            'Description': description,
+            'Model Name': suggestedModel,
+            // 'File': fileUrl
+        };
+    
+        for (const [field, value] of Object.entries(fields)) {
+            if (!value) {
+                setMessage(`Error: ${field} must be filled out.`);
+                return;
+            }
+        }
         if (blockedModels.includes(suggestedModel)) {
             setMessage('Error: The selected model is not allowed.');
             return;
@@ -86,13 +101,14 @@ function FineTuningApp() {
                  },
                 body: JSON.stringify({
                     model: suggestedModel,
-                    name: fineTuningModelName,
+                    name: fineTuningModelName, // Assurez-vous que ce champ est bien transmis
                     seed: parseInt(seed),
                     n_epochs: parseInt(epochs),
                     learning_rate: parseFloat(learningRate),
                     batch_size: parseInt(batchSize),
                     training_data_path: fileUrl,
-                    email: email
+                    email: email,
+                    description: description // Include description in the payload
                 }),
                 credentials: 'include', // Inclure les cookies de session
             });
@@ -284,7 +300,10 @@ function FineTuningApp() {
             }
         }
     };
-
+    const [selectedModel, setSelectedModel] = useState(null);
+    const handleSelectModel = (modelName) => {
+        setSelectedModel(modelName);
+      };
     return (
         <div className="finetuning-app">
             <h1 className="finetuning-title">{t('finetuning.fine_tuning_interface')}</h1>
@@ -312,8 +331,13 @@ function FineTuningApp() {
                     </ul>
                 </div>
             </div>
+            <ModelSelectionPopup 
+                    onSelectModel={handleSelectModel} 
+                    />
             <div className="finetuning-container">
+                
                 <div className="finetuning-top">
+
                     <div className="finetuning-left">
                         <div className="finetuning-upload">
                             {!isFileUploaded && (
@@ -344,12 +368,27 @@ function FineTuningApp() {
                             <datalist id="model-suggestions">
                                 <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
                             </datalist>
+                            <label>{('Description')}</label>
+                            <textarea 
+                                placeholder={t('finetuning.enter_description')} 
+                                className="finetuning-input" 
+                                value={description} 
+                                onChange={(e) => setDescription(e.target.value)} 
+                            />
                         </div>
                     </div>
                     <div className="finetuning-right">
                         <label>{t('finetuning.fine_tuning_model_name')}</label>
-                        <input type="text" placeholder={t('finetuning.fine_tuning_model_name')} className="finetuning-input" value={fineTuningModelName || 'custom-model'} onChange={(e) => setFineTuningModelName(e.target.value)} />
-                        
+                        <input 
+                            type="text" 
+                            placeholder={t('finetuning.fine_tuning_model_name')} 
+                            className="finetuning-input" 
+                            value={fineTuningModelName} 
+                            onChange={(e) => {
+                                const value = e.target.value.replace(/[^a-zA-Z0-9_-]/g, ''); // Remove special characters and spaces
+                                setFineTuningModelName(value);
+                            }} 
+                        />                        
                         <label>{t('finetuning.seed')}</label>
                         <input type="text" placeholder={t('finetuning.seed')} className="finetuning-input" value={seed || 'auto'} onChange={(e) => setSeed(e.target.value)} />
                         
@@ -381,7 +420,7 @@ function FineTuningApp() {
                     </div>
                 )}
             </div>
-            <div className="finetuning-bottom">
+            {/* <div className="finetuning-bottom">
                 <div className="finetuning-bottom-section">
                     <p>{t('finetuning.refresh_to_see_new_model')}</p>
                 </div>
@@ -405,7 +444,7 @@ function FineTuningApp() {
                     </select>
                 </div>
                 <div className="spacer_finetuning"></div>
-            </div>
+            </div> */}
             <div className="spacer_finetuning"></div><div className="spacer_finetuning"></div>
             <div className="finetuning-bottom-section">
                 <button className="finetuning-button-grey" onClick={() => window.location.href = '/home'}>{t('finetuning.jsonl_creator')}</button>

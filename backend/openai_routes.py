@@ -133,7 +133,7 @@ def start_fine_tuning():
     try:
         user_email = session.get('email')
         if not user_email:
-            return jsonify({'error': 'User not authenticated'}), 401
+            return jsonify({'error': 'User email not found in session'}), 400
 
         data = request.json
         
@@ -149,10 +149,10 @@ def start_fine_tuning():
 
         # Vérifier si le modèle est bloqué
         if data['model'] in blocked_models:
-            return jsonify({'error': 'Model is blocked'}), 400
+            return jsonify({'error': 'Selected model is not allowed'}), 400
         
         # Validate input data for fine-tuning parameters
-        required_fields = ['model', 'name', 'seed', 'n_epochs', 'learning_rate', 'batch_size']
+        required_fields = ['model', 'name', 'seed', 'n_epochs', 'learning_rate', 'batch_size', 'description']
         for field in required_fields:
             if field not in data:
                 return jsonify({'error': f'Missing required field: {field}'}), 400
@@ -160,7 +160,7 @@ def start_fine_tuning():
         # Retrieve the training data path from the session
         training_data_path = session.get('training_data_path')
         if not training_data_path:
-            return jsonify({'error': 'Training data path not found'}), 400
+            return jsonify({'error': 'Training data path not found in session'}), 400
 
         # Ensure the training data path is a temporary file
         if not training_data_path.startswith(config.TEMP_DIR):
@@ -172,30 +172,31 @@ def start_fine_tuning():
         # Check if user has enough tokens and a valid subscription
         is_allowed, message = check_quota(user_email, tokens_needed)
         if not is_allowed:
-            return jsonify({'error': message}), 403
+            return jsonify({'error': message}), 400
 
         # Check if the user has a valid subscription
         subscription = supabase.table('subscriptions').select('status').eq('email', user_email).execute()
         if not subscription.data or subscription.data[0]['status'] not in ('succeeded', 'paid'):
-            return jsonify({'error': 'Invalid subscription'}), 403
+            return jsonify({'error': 'Invalid subscription status'}), 400
 
         # Vérifier que l'utilisateur est bien le créateur du modèle
         job_id = data.get('job_id')
         if job_id:
             job_metadata = supabase.table('fine_tuning_jobs').select('user_email').eq('job_id', job_id).execute()
             if not job_metadata.data or job_metadata.data[0]['user_email'] != user_email:
-                return jsonify({'error': 'Unauthorized'}), 403
+                return jsonify({'error': 'User is not the creator of the model'}), 400
 
         # Define the fine-tuning parameters
         fine_tuning_handle.create_fine_tuning_job(
             user_email=user_email,
             training_data_path=training_data_path,
             model=data['model'],
-            name=data['name'],
+            name=data['name'],  # Assurez-vous que ce champ est bien transmis
             seed=data['seed'],
             n_epochs=data['n_epochs'],
             learning_rate=data['learning_rate'],
-            batch_size=data['batch_size']
+            batch_size=data['batch_size'],
+            description=data['description']  # Include description
         )
 
         logging.info("Fine-tuning started successfully")
@@ -214,6 +215,7 @@ def start_fine_tuning():
     except Exception as e:
         logging.error(f"Error starting fine-tuning: {e}")
         return jsonify({'error': str(e)}), 500
+    
     
 @fine_tuning_bp.route('/delete-all-temp-files', methods=['POST'])
 @limiter.exempt
@@ -351,12 +353,16 @@ def cancel_job():
             return jsonify({'error': 'You are not authorized to cancel this job'}), 403
 
         fine_tuning_handle.cancel_fine_tuning_job([job_id])
-        logging.info(f"Job {job_id} cancelled successfully")
-        return jsonify({'message': 'Job cancelled successfully'}), 200
+        
+        # Supprimer le modèle de la base de données Supabase
+        supabase.table('fine_tuning_jobs').delete().eq('job_id', job_id).execute()
+
+        logging.info(f"Job {job_id} cancelled and deleted successfully")
+        return jsonify({'message': 'Job cancelled and deleted successfully'}), 200
     except Exception as e:
         logging.error(f"Error cancelling job {job_id}: {e}")
         return jsonify({'error': str(e)}), 500
-
+        
 with open('payment_links.json') as f:
     payment_links = json.load(f)
 
@@ -369,7 +375,10 @@ def copy_model_name():
             return jsonify({'error': 'Job info must be provided!'}), 400
 
         # Extract the model name from the job info string using the new logic
-        model_name = job_info.split("name: ")[1].split(" - ")[0].strip()
+        try:
+            model_name = job_info.split("name: ")[1].split(" - ")[0].strip()
+        except IndexError:
+            model_name = job_info  # Fallback to job_info if parsing fails
 
         return jsonify({'message': 'Model name copied successfully!', 'model_name': model_name}), 200
     except Exception as e:
@@ -561,29 +570,48 @@ def delete_chat_history():
     
 
 @fine_tuning_bp.route('/public-models', methods=['GET'])
+@limiter.limit("200 per hour")  # Increase the rate limit
 def get_public_models():
     try:
-        response = supabase.table('fine_tuning_jobs').select('*').eq('is_public', True).execute()
+        page = int(request.args.get('page', 1))
+        limit = int(request.args.get('limit', 20))
+        offset = (page - 1) * limit
+
+        response = supabase.table('fine_tuning_jobs').select('*').eq('is_public', True).range(offset, offset + limit - 1).execute()
+        total_models_response = supabase.table('fine_tuning_jobs').select('*').eq('is_public', True).execute()
+        total_models = len(total_models_response.data) if total_models_response.data else 0
+
         if response.data:
-            models = [{'id': job['job_id'], 'name': job['hyperparameters']['name'], 'image': 'default-image.png'} for job in response.data]
-            return jsonify({'models': models}), 200
-        return jsonify({'models': []}), 200
+            models = [{'id': job['job_id'], 'name': job['hyperparameters'].get('name', 'Unnamed Model'), 'hyperparameters': job['hyperparameters'], 'description': job.get('description', 'No description available')} for job in response.data]
+            total_pages = (total_models + limit - 1) // limit
+            return jsonify({'models': models, 'totalPages': total_pages}), 200
+        return jsonify({'models': [], 'totalPages': 1}), 200
     except Exception as e:
         logging.error(f"Error fetching public models: {e}")
         return jsonify({'error': str(e)}), 500
 
 @fine_tuning_bp.route('/user-models', methods=['GET'])
+@limiter.limit("200 per hour")  # Increase the rate limit
 def get_user_models():
     try:
         user_email = session.get('email')
         if not user_email:
+            logging.error("No email in session")
             return jsonify({'error': 'No email in session'}), 400
 
-        response = supabase.table('fine_tuning_jobs').select('*').eq('user_email', user_email).execute()
+        page = int(request.args.get('page', 1))
+        limit = int(request.args.get('limit', 10))
+        offset = (page - 1) * limit
+
+        response = supabase.table('fine_tuning_jobs').select('*').eq('user_email', user_email).range(offset, offset + limit - 1).execute()
+        total_models_response = supabase.table('fine_tuning_jobs').select('*').eq('user_email', user_email).execute()
+        total_models = len(total_models_response.data) if total_models_response.data else 0
+
         if response.data:
-            models = [{'id': job['job_id'], 'name': job['hyperparameters']['name'], 'image': 'default-image.png'} for job in response.data]
-            return jsonify({'models': models}), 200
-        return jsonify({'models': []}), 200
+            models = [{'id': job['job_id'], 'name': job['hyperparameters'].get('name', 'Unnamed Model'), 'hyperparameters': job['hyperparameters'], 'description': job.get('description', 'No description available')} for job in response.data]
+            total_pages = (total_models + limit - 1) // limit
+            return jsonify({'models': models, 'totalPages': total_pages}), 200
+        return jsonify({'models': [], 'totalPages': 1}), 200
     except Exception as e:
         logging.error(f"Error fetching user models: {e}")
         return jsonify({'error': str(e)}), 500

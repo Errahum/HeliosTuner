@@ -1,0 +1,148 @@
+.model-selection-popup {
+    /* Supprimez les styles de popup */
+    position: relative;
+    width: 100%;
+    height: auto;
+    background: none;
+    display: block;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.popup-content {
+    background: #252525;
+    padding: 20px;
+    border-radius: 8px;
+    width: 95%;
+    max-width: none;
+    position: relative;
+    box-shadow: none;
+}
+
+.close-button {
+    display: none; /* Cachez le bouton de fermeture */
+}
+
+.tabs {
+    display: flex;
+    justify-content: flex-start; /* Align tabs to the left */
+    margin-bottom: 20px;
+}
+
+.tabs button {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    background: #5a5a5a;
+    border-radius: 4px;
+    color: black;
+    margin-right: 10px; /* Add space between buttons */
+}
+
+.tabs button.active {
+    background: #FFA500;
+    color: black;
+}
+
+.model-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: left;
+}
+
+.model-card {
+    background-color: #003366;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.model-card img {
+    width: 80px;
+    height: 80px;
+}
+
+.model-card p {
+    margin-top: 10px;
+}
+
+.model-card:hover {
+    background-color: #00509e;
+}
+
+.error-message {
+    color: red;
+    text-align: left;
+    margin-top: 20px;
+}
+.pagination {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    background: #5a5a5a;
+    border-radius: 4px;
+    color: black;
+    margin: 0 10px; /* Add space between buttons */
+}
+
+.pagination button:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    margin: 0 10px;
+    color: white;
+}
+.refresh-button {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    background: #5a5a5a;
+    border-radius: 4px;
+    color: black;
+    margin-top: 20px;
+}
+.model-details-popup {
+    background-color: #252525;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.model-details-popup h2 {
+    color: #FFA500;
+}
+
+.model-details-popup p {
+    color: white;
+    margin-top: 10px;
+}
+
+.model-details-popup .finetuning-button-grey {
+    margin-top: 20px;
+}
+
+.model-details-popup .finetuning-button-blue {
+    margin-top: 10px;
+}
+
+.model-details-popup .loading-spinner {
+    margin-top: 20px;
+}
+
+.model-details-popup .success-message {
+    color: green;
+    margin-top: 10px;
+}
